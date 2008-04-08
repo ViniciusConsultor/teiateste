@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Collections;
-using SWEDA;
+using SWEDA; 
 
 
 namespace uniBaterFrenteLoja

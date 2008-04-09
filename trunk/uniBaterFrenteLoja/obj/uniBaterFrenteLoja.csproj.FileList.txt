@@ -1,9 +1,0 @@
-bin\Debug\uniBaterFrenteLoja.exe
-bin\Debug\uniBaterFrenteLoja.pdb
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\uniBaterFrenteLoja.Form1.resources
-obj\Debug\uniBaterFrenteLoja.Properties.Resources.resources
-obj\Debug\uniBaterFrenteLoja.csproj.GenerateResource.Cache
-obj\Debug\uniBaterFrenteLoja.exe
-obj\Debug\uniBaterFrenteLoja.pdb
-obj\Debug\uniBaterFrenteLoja.login.resources

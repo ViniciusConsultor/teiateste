@@ -946,8 +946,8 @@ namespace uniBaterFrenteLoja
             this.Controls.Add(this.cbFormaPagamento);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label8);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label18);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtSubTotal);

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Font Name="Tahoma" Size="8.25" />
+  <Class Name="uniBaterFrenteLoja.Form1">
+    <Position X="0.5" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <FileName>Form1.cs</FileName>
+      <HashCode>/0AIo1EDJGABA1IACAiERQBKAxVEQDwQsQT0jChAADE=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="uniBaterFrenteLoja.conexao">
+    <Position X="3.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>conexao.cs</FileName>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="uniBaterFrenteLoja.combo">
+    <Position X="3.5" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <FileName>combo.cs</FileName>
+      <HashCode>ABAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAEAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+</ClassDiagram>

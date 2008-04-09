@@ -423,13 +423,16 @@ namespace uniBaterFrenteLoja
             MySql objBanco = new MySql();
             try
             {
-                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo from ubestoque,ubprod where etqcod_prod = ubprod.id and pdOriginal = ?id;", parametros);
+                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT ubprod.id,etqvalor,pdDescProd,pdOriginal,pdTributo from ubestoque,ubprod where etqcod_prod = ubprod.id and pdOriginal = ?id;", parametros);
 
-                float subTotal = float.Parse(dr[0].ToString()) * float.Parse(numQtd.Value.ToString());
-                txtValor.Text = string.Format("{0:n2}", dr[0]);
+                float valor = float.Parse(dr[0].ToString());
+                valor = valor * (float.Parse(lista) / 100);
+                float subTotal = valor * float.Parse(numQtd.Value.ToString());
+
+                txtValor.Text = string.Format("{0:n2}", valor);
                 txtSubTotal.Text = string.Format("{0:n2}", subTotal);
                 txtDescProduto.Text = dr["pdDescProd"].ToString();
-                txtCodProduto.Text = dr["pdOriginal"].ToString();
+                txtCodProduto.Text = dr["id"].ToString();
                 txtAliquota.Text = dr["pdTributo"].ToString();
 
             }

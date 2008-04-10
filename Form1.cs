@@ -626,7 +626,7 @@ namespace uniBaterFrenteLoja
 
         private void txtValor_KeyUp(object sender, KeyEventArgs e)
         {
-            txtSubTotal.Text = float.Parse(txtValor.Text) * float.Parse(numQtd.Value);        
+            txtSubTotal.Text = float.Parse(txtValor.Text) *  convernumQtd.Value;        
 
         }
 

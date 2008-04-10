@@ -139,12 +139,68 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox8_Click(object sender, EventArgs e)
         {
+            comprarBateria();
+        }
+
+        public bool compraSucata = false;
+        string comando;
+        int result;
+        int codCompraBateria;
+
+        public void comprarBateria(){
+            //Gera numero compra
+            MySql objBanco = new MySql();
+            
+
+            if (compraSucata == false)
+            {
+                result = Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select id from ubvencomsucata order by id desc").ItemArray[0]);
+                codCompraBateria = ++result;
+
+                ///compra sucata
+                MySqlParameter[] parametros = new MySqlParameter[6];
+                parametros[0] = new MySqlParameter("?id", codCompraBateria);
+                parametros[1] = new MySqlParameter("?nome", txtNomeCliente.Text);
+                parametros[2] = new MySqlParameter("?doc", txtCpfCnpj.Text);
+                parametros[3] = new MySqlParameter("?data", DateTime.Now.ToString("yyyy-dd-MM HH:mm:ss"));
+                parametros[4] = new MySqlParameter("?loja", login.idLoja);
+                parametros[5] = new MySqlParameter("?funcionario", login.idUsuario);
+
+                comando = "INSERT INTO ubvencomsucata SET id=?id, sunome=?nome, suPj=?doc, suDia=?data, suLoja=?loja, suFunc=?funcionario,sutipo='1'";
+                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parametros);
+                compraSucata = true;
+            }
+
+            result = Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select id from ubitemsucata order by id desc").ItemArray[0]);
+            int codCompraItemSucata = ++result;
+            int codProduto = cbTipoBateria.SelectedIndex; 
+            //item sucata
+            MySqlParameter[] parametrosItem = new MySqlParameter[6];
+            parametrosItem[0] = new MySqlParameter("?id", codCompraItemSucata);
+            parametrosItem[1] = new MySqlParameter("?itprod", ++codProduto);
+            parametrosItem[2] = new MySqlParameter("?itquant", numQtdCompra.Value);
+            parametrosItem[3] = new MySqlParameter("?itvalor", txtValorCompra.Text.Replace(",","."));
+            parametrosItem[4] = new MySqlParameter("?itsubtotal", txtSubTotalCompra.Text.Replace(",", "."));
+            parametrosItem[5] = new MySqlParameter("?itvencomsucata", codCompraBateria);
+
+            comando = "INSERT INTO ubitemsucata SET id=?id, itprod=?itprod, itquant=?itquant, itvalor=?itvalor, itsubtotal=?itsubtotal, itvencomsucata=?itvencomsucata";
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parametrosItem);
+
+            MySqlParameter[] parametrosDGV= new MySqlParameter[1];
+            parametrosDGV[0] = new MySqlParameter("?venda", codCompraBateria);
+
+            comando = "SELECT itvencomsucata 'COD. VENDAS',suprod 'PRODUTO',itquant 'QUANTIDADE', itvalor 'VALOR',itsubtotal 'SUBTOTAL'  FROM ubitemsucata,ubsucataprod WHERE itvencomsucata = ?venda and ubitemsucata.itprod = ubsucataprod.id order by ubitemsucata.id desc  ";
+            DataTable tabelaSucata = new DataTable();
+            tabelaSucata = objBanco.RetornaDataTable(conexao, CommandType.Text, comando, parametrosDGV);
+            dgvBateriasCompra.DataSource = tabelaSucata;
+        
         }
 
         private void txtValorCompra_KeyPress(object sender, KeyPressEventArgs e)
         {
             //Ao apertar BackSpace limpar textbox
-            if (e.KeyChar == (Char)Keys.Back) {
+            if (e.KeyChar == (Char)Keys.Back)
+            {
                 txtValorCompra.Text = "";
             }
             //Caso seja digitado um ponto coloca-se uma vírgula
@@ -153,7 +209,7 @@ namespace uniBaterFrenteLoja
                 e.KeyChar = (char)(44);
             }
 
-               if (!Char.IsDigit(e.KeyChar) && e.KeyChar != (Char)Keys.Back && e.KeyChar != ',')
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != (Char)Keys.Back && e.KeyChar != ',')
             {
                 e.Handled = true;
                 return;
@@ -570,7 +626,7 @@ namespace uniBaterFrenteLoja
 
         private void txtValor_KeyUp(object sender, KeyEventArgs e)
         {
-            txtSubTotal.Text = txtValor.Text;        
+            txtSubTotal.Text = float.Parse(txtValor.Text) * float.Parse(numQtd.Value);        
 
         }
 
@@ -615,6 +671,64 @@ namespace uniBaterFrenteLoja
                     int tamanho = txtValor.Text.Length;
                     posSeparator = ++posSeparator;
                     string depoisVirgula = txtValor.Text.Substring(posSeparator);
+
+                    if (depoisVirgula.Length > 1)
+                    {
+
+                        e.Handled = true;
+
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void pictureBox6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtSubTotalCompra_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //Ao apertar BackSpace limpar textbox
+            if (e.KeyChar == (Char)Keys.Back)
+            {
+                txtSubTotalCompra.Text = "";
+            }
+            //Caso seja digitado um ponto coloca-se uma vírgula
+            if (e.KeyChar == ((char)(46)))
+            {
+                e.KeyChar = (char)(44);
+            }
+
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != (Char)Keys.Back && e.KeyChar != ',')
+            {
+                e.Handled = true;
+                return;
+            }
+
+            //pega a posição da virgula, caso ela exista:
+            int posSeparator = txtSubTotalCompra.Text.IndexOf(',');
+
+            //se a tecla digitada for virgula e ela já existir, barra:
+            if (e.KeyChar == ',' && posSeparator > -1)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            //verifica quantos digitos há após a vírgula
+            if (txtSubTotalCompra.Text.Contains(","))
+            {
+                string selecao = txtSubTotalCompra.Text.Substring(txtSubTotalCompra.SelectionStart);
+                if (selecao.Contains(","))
+                {
+                }
+                else
+                {
+                    int tamanho = txtValor.Text.Length;
+                    posSeparator = ++posSeparator;
+                    string depoisVirgula = txtSubTotalCompra.Text.Substring(posSeparator);
 
                     if (depoisVirgula.Length > 1)
                     {

@@ -802,6 +802,12 @@ namespace uniBaterFrenteLoja
             if (statusCupom.ToString() == "1")
             {
                 ECFSWEDA.ECF_CancelaCupom();
+                rtbCupom.Text = rtbCupom.Text + "============================================\n";
+                rtbCupom.Text = rtbCupom.Text + "              CUPOM CANCELADO               \n";
+                rtbCupom.Text = rtbCupom.Text + "============================================\n";
+                rtbCupom.Focus();
+                rtbCupom.Select(rtbCupom.Text.Length, 0);
+
             }
             else
             {

@@ -136,6 +136,9 @@
     <None Include="bin\Debug\img\btnAdd.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Debug\img\btNCancelaCupom.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

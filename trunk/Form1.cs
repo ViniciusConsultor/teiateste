@@ -18,7 +18,7 @@ namespace uniBaterFrenteLoja
         public string lista;
         public string clienteEncontrado = "0";
         public string cupomAberto = "0";
-
+        public int status;
 
         public Form1()
         {
@@ -28,7 +28,12 @@ namespace uniBaterFrenteLoja
         private void Form1_Load(object sender, EventArgs e)
         {
 
-            
+            int abrePorta = ECFSWEDA.ECF_AbrePortaSerial();
+            if (abrePorta == 1) {
+                ECFSWEDA.ECF_ZAUTO("1");
+                MessageBox.Show("Porta Aberta!");
+            }
+
             ArrayList ar = new ArrayList();
             ar.Add(new combo("Bloqueado","B"));
             ar.Add(new combo("Desbloqueado", "D"));
@@ -104,7 +109,7 @@ namespace uniBaterFrenteLoja
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            
+            int abrePorta = ECFSWEDA.ECF_FechaPortaSerial();
             Application.Exit();
 
         }
@@ -292,7 +297,7 @@ namespace uniBaterFrenteLoja
                 }
                 lblStatusBusca.Text = "";
 
-                clienteEncontrado = "1";
+                clienteEncontrado = "0";
 
             }
             catch
@@ -353,6 +358,7 @@ namespace uniBaterFrenteLoja
                     cbBloquear.SelectedIndex = 1;
                 }
                 lblStatusBusca.Text = "";
+                clienteEncontrado = "0";
 
             }
             catch
@@ -519,6 +525,22 @@ namespace uniBaterFrenteLoja
         }
         public void abreCupom() 
         {
+            status = ECFSWEDA.ECF_AbreCupom(txtCpfCnpj.Text);
+            // Verifica se há algum cupom Aberto 
+            if (status != 1)
+            {
+                StringBuilder statusCupom = new StringBuilder(2);
+                status = ECFSWEDA.ECF_StatusCupomFiscal(statusCupom);
+                if (statusCupom.ToString() != "0")
+                {
+                    MessageBox.Show("Existe cupom aberto atualmente!");
+                    return;
+                }
+            }
+            
+
+            
+            
 
             //Gera numero da venda
             MySql objBanco = new MySql();            
@@ -532,7 +554,7 @@ namespace uniBaterFrenteLoja
             par[1] = new MySqlParameter("?vendaData",DateTime.Now.ToString("yyyy-dd-MM HH:mm:ss"));
             par[2] = new MySqlParameter("?vendaLoja",Convert.ToInt32(login.idLoja));
             par[3] = new MySqlParameter("?vendaOperador",Convert.ToInt32(login.idUsuario));
-            par[4] = new MySqlParameter("?vendaLista",lista);
+            par[4] = new MySqlParameter("?vendaLista",lista.Replace(",","."));
             par[5] = new MySqlParameter("?vendaCategoria", cbFormaPagamento.SelectedValue);
             par[6] = new MySqlParameter("?vendaCodCli", txtCodigoCliente.Text);
 
@@ -547,6 +569,8 @@ namespace uniBaterFrenteLoja
             rtbCupom.Text = rtbCupom.Text + "QTD.    UNI.   VL UNIT(R$)       VL ITEM(R$)\n";
             rtbCupom.Focus();
             rtbCupom.Select(rtbCupom.Text.Length, 0);
+
+           
 
         }
         public void insereCliente() 
@@ -574,7 +598,7 @@ namespace uniBaterFrenteLoja
                     tipoCliente = "A";
 
                 }
-                string ddd = txtTelefone.Text.Substring(1,2);
+                string ddd = txtTelefone.Text.Substring(1, 2);
                 string tel = txtTelefone.Text.Substring(5);
                 MySqlParameter[] par = new MySqlParameter[7];
                 par[0] = new MySqlParameter("?cfNome", txtNomeCliente.Text);
@@ -617,16 +641,24 @@ namespace uniBaterFrenteLoja
 
                     abreCupom();
                 }
-                catch 
+                catch
                 {
                     MessageBox.Show("Houve um erro tente novamente!");
                 }
+            }
+            else {
+                MessageBox.Show("Preencha os dados do cliente corretamente!");
             }
         }
 
         private void txtValor_KeyUp(object sender, KeyEventArgs e)
         {
-            txtSubTotal.Text = float.Parse(txtValor.Text) *  convernumQtd.Value;        
+            try
+            {
+                decimal subTotalVenda = Convert.ToDecimal(txtValor.Text) * Convert.ToDecimal(numQtd.Value);
+                txtSubTotal.Text = subTotalVenda.ToString();
+            }
+            catch { }
 
         }
 
@@ -738,6 +770,42 @@ namespace uniBaterFrenteLoja
                         return;
                     }
                 }
+            }
+        }
+
+        private void txtValorCompra_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                decimal subtotalCompraSucata = Convert.ToDecimal(txtValorCompra.Text) * Convert.ToDecimal(numQtdCompra.Value);
+                txtSubTotalCompra.Text = subtotalCompraSucata.ToString();
+            }
+            catch {
+            }
+        }
+
+        private void numQtdCompra_ValueChanged(object sender, EventArgs e)
+        {
+            decimal subtotalCompraSucata = Convert.ToDecimal(txtValorCompra.Text) * Convert.ToDecimal(numQtdCompra.Value);
+            txtSubTotalCompra.Text = subtotalCompraSucata.ToString();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void pictureBox9_Click(object sender, EventArgs e)
+        {
+            StringBuilder statusCupom = new StringBuilder(2);
+            ECFSWEDA.ECF_StatusCupomFiscal(statusCupom);
+            if (statusCupom.ToString() == "1")
+            {
+                ECFSWEDA.ECF_CancelaCupom();
+            }
+            else
+            {
+                MessageBox.Show("Não há cupom a cancelar.");
             }
         }
     }

@@ -137,7 +137,7 @@ using System.Text;
         public static extern int ECF_RetornaCOO(StringBuilder Ret);
 
         [DllImport("CONVECF.DLL")]
-        public static extern int ECF_ZAUTO();
+        public static extern int ECF_ZAUTO(string auto);
        
         [DllImport("CONVECF.DLL")]
         public static extern int ECF_FechamentoDoDia();

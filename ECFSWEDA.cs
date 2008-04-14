@@ -76,6 +76,13 @@ using System.Text;
         public static extern int ECF_AbreCupom(string CGC_CPF);
 
         [DllImport("Convecf.dll")]
+        public static extern int ECF_SubTotal(StringBuilder sSubTotal);
+
+       [DllImport("Convecf.dll")]
+       public static extern int ECF_UltimoItemVendido(StringBuilder ultimoCupom);
+
+
+        [DllImport("Convecf.dll")]
         public static extern int ECF_VendeItem(string Codigo, string Descricao, string Aliquota,
             string TipoQuantidade, string Quantidade, int CasasDecimais,
             string ValorUnitario, string TipoDesconto, string Desconto);

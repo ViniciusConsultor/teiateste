@@ -19,6 +19,10 @@ namespace uniBaterFrenteLoja
         public string clienteEncontrado = "0";
         public string cupomAberto = "0";
         public int status;
+        public StringBuilder coo = new StringBuilder(6);
+
+        //retornoEcf
+        int ack, st1, st2, st3;
 
         public Form1()
         {
@@ -75,7 +79,7 @@ namespace uniBaterFrenteLoja
             timerHora.Tick += new EventHandler(timerHora_Tick);
 
             con.preencheCB(cbTipoBateria, "select sukgunid,suprod from ubsucataprod;",conexao);
-            con.preencheCB(cbFormaPagamento, "select cod,nome from ubformapag;",conexao);
+            con.preencheCB(cbFormaPagamento, "select nome,nome from ubformapag;",conexao);
 
             getListaComissao();
 
@@ -167,7 +171,7 @@ namespace uniBaterFrenteLoja
                 parametros[0] = new MySqlParameter("?id", codCompraBateria);
                 parametros[1] = new MySqlParameter("?nome", txtNomeCliente.Text);
                 parametros[2] = new MySqlParameter("?doc", txtCpfCnpj.Text);
-                parametros[3] = new MySqlParameter("?data", DateTime.Now.ToString("yyyy-dd-MM HH:mm:ss"));
+                parametros[3] = new MySqlParameter("?data", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 parametros[4] = new MySqlParameter("?loja", login.idLoja);
                 parametros[5] = new MySqlParameter("?funcionario", login.idUsuario);
 
@@ -297,7 +301,7 @@ namespace uniBaterFrenteLoja
                 }
                 lblStatusBusca.Text = "";
 
-                clienteEncontrado = "0";
+                clienteEncontrado = "1";
 
             }
             catch
@@ -525,8 +529,14 @@ namespace uniBaterFrenteLoja
         }
         public void abreCupom() 
         {
+            
             status = ECFSWEDA.ECF_AbreCupom(txtCpfCnpj.Text);
             // Verifica se há algum cupom Aberto 
+
+            if (status == 1) {
+            ECFSWEDA.ECF_RetornaCOO(coo);
+            }
+
             if (status != 1)
             {
                 StringBuilder statusCupom = new StringBuilder(2);
@@ -539,26 +549,25 @@ namespace uniBaterFrenteLoja
             }
             
 
-            
-            
-
             //Gera numero da venda
             MySql objBanco = new MySql();            
             int result= Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select count(*) from ubvenda").ItemArray[0]);
             int codVenda = ++result;
 
-
             //Grava dados da Venda
-            MySqlParameter[] par = new MySqlParameter[7];
+            MySqlParameter[] par = new MySqlParameter[8];
             par[0] = new MySqlParameter("?vendaCod",codVenda);
-            par[1] = new MySqlParameter("?vendaData",DateTime.Now.ToString("yyyy-dd-MM HH:mm:ss"));
+            par[1] = new MySqlParameter("?vendaData",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             par[2] = new MySqlParameter("?vendaLoja",Convert.ToInt32(login.idLoja));
             par[3] = new MySqlParameter("?vendaOperador",Convert.ToInt32(login.idUsuario));
             par[4] = new MySqlParameter("?vendaLista",lista.Replace(",","."));
             par[5] = new MySqlParameter("?vendaCategoria", cbFormaPagamento.SelectedValue);
             par[6] = new MySqlParameter("?vendaCodCli", txtCodigoCliente.Text);
+            par[7] = new MySqlParameter("?vendaCOO", coo.ToString());
 
-            objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubvenda (vendaCodigo,vendaCoo,vendaCupom,vendaLoja,vendaCodCli,vendaData,vendaOperador,vendaCategoria,vendaLista) values(?vendaCod,'','C',?vendaLoja,?vendaCodCli,?vendaData,?vendaOperador,?vendaCategoria,?vendaLista)", par);
+            lblCoo.Text = "COO: " + coo.ToString();
+
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubvenda (vendaCodigo,vendaCoo,vendaCupom,vendaLoja,vendaCodCli,vendaData,vendaOperador,vendaCategoria,vendaLista) values(?vendaCod,?vendaCOO,'C',?vendaLoja,?vendaCodCli,?vendaData,?vendaOperador,?vendaCategoria,?vendaLista)", par);
             rtbCupom.Text = rtbCupom.Text + "============================================\n";
             rtbCupom.Text = rtbCupom.Text + "    DAVID MARCOS RODRIGUES BATERIAS EPP.\n";
             rtbCupom.Text = rtbCupom.Text + "        AV. DR. JOÃO GUIMARÃES, 735\n";
@@ -566,13 +575,13 @@ namespace uniBaterFrenteLoja
             rtbCupom.Text = rtbCupom.Text + "CNPJ:68.955.459/0005-06   IE:149.831.779.113\n";
             rtbCupom.Text = rtbCupom.Text + "============================================\n";
             rtbCupom.Text = rtbCupom.Text + "ITEM CÓDIGO    DESCRIÇÃO                    \n";
-            rtbCupom.Text = rtbCupom.Text + "QTD.    UNI.   VL UNIT(R$)       VL ITEM(R$)\n";
+            rtbCupom.Text = rtbCupom.Text + "QTD.           VL UNIT(R$)       VL ITEM(R$)\n";
             rtbCupom.Focus();
             rtbCupom.Select(rtbCupom.Text.Length, 0);
-
-           
+            
 
         }
+
         public void insereCliente() 
         {
             if ((txtCpfCnpj.Text != "") && (txtNomeCliente.Text != "") && (txtTelefone.Text != ""))
@@ -717,6 +726,68 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox6_Click(object sender, EventArgs e)
         {
+            inserirItem();
+        }
+
+        private void inserirItem() {
+
+           status =  ECFSWEDA.ECF_VendeItem(txtCodProduto.Text, txtDescProduto.Text, txtAliquota.Text, "I", numQtd.Value.ToString(), 2, txtValor.Text, "$", "");
+          // status = ;
+          // MessageBox.Show(st3.ToString());
+           if (status != 1) 
+           {
+               ECFSWEDA.ECF_RetornoImpressoraMFD(ref ack, ref st1, ref st2, ref  st3);
+               MessageBox.Show("ERRO: " + st3.ToString());
+           }
+           else
+           {
+               StringBuilder item = new StringBuilder(4);
+               ECFSWEDA.ECF_UltimoItemVendido(item);
+               int count = txtDescProduto.Text.Length;
+               string espacos = new string(' ', 29 - count);
+               string descricao = txtDescProduto.Text + espacos;
+               string cod = txtCodProduto.Text;
+               count = cod.Length;
+               espacos = new string(' ', 10 - count);
+               cod = cod + espacos;
+
+               string qtd = numQtd.Value.ToString();
+               count = qtd.Length;
+               espacos = new string(' ', 8 - count);
+               qtd = qtd + espacos;
+
+               string valor = txtValor.Text.ToString();
+               count = valor.Length;
+               espacos = new string(' ', 18 - count);
+               valor = valor + espacos;
+
+               string subtotal = txtSubTotal.Text.ToString();
+
+
+              
+             //44
+             //rtbCupom.Text = rtbCupom.Text + "ITEM CÓDIGO    DESCRIÇÃO                    \n";
+             //rtbCupom.Text = rtbCupom.Text + "QTD.           VL UNIT(R$)       VL ITEM(R$)\n";
+               rtbCupom.Text = rtbCupom.Text + item + " " +cod+ descricao + "\n";
+               rtbCupom.Text = rtbCupom.Text + qtd + " x     " + valor + subtotal + "\n";
+               rtbCupom.Focus();
+               rtbCupom.Select(rtbCupom.Text.Length, 0);
+
+               subTotal();
+           }
+        }
+
+        private void subTotal() 
+        {
+            StringBuilder subTotalB = new StringBuilder(14);
+            ECFSWEDA.ECF_SubTotal(subTotalB);
+
+            string subTotal = subTotalB.ToString();
+            string subTotalP1 = subTotal.Substring(0,12);
+            string subTotalP2 = subTotal.Substring(12,2);
+            subTotal = subTotalP1 + "," + subTotalP2;
+            decimal subTotalDec = Convert.ToDecimal(subTotal);
+            txtTotal.Text = string.Format("{0:c}",subTotalDec);
 
         }
 
@@ -814,6 +885,16 @@ namespace uniBaterFrenteLoja
                 MessageBox.Show("Não há cupom a cancelar.");
             }
         }
+
+        private void pictureBox7_Click(object sender, EventArgs e)
+        {
+           fechaCupom();
+        }
+
+        private void fechaCupom(){
+            string meioPagamento = cbFormaPagamento.SelectedValue.ToString();
+            ECFSWEDA.ECF_FechaCupom(meioPagamento, "A", "$", "0000", txtValorPago.Text, "A UNIBATER AGRADECE A PREFERÊNCIA - VOLTE SEMPRE");
+         }
     }
 
 }

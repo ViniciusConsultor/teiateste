@@ -81,6 +81,11 @@ using System.Text;
        [DllImport("Convecf.dll")]
        public static extern int ECF_UltimoItemVendido(StringBuilder ultimoCupom);
 
+        [DllImport("Convecf.dll")]
+       public static extern int ECF_ValorPagoUltimoCupom(StringBuilder valorPago);
+
+       
+
 
         [DllImport("Convecf.dll")]
         public static extern int ECF_VendeItem(string Codigo, string Descricao, string Aliquota,

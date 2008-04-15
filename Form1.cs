@@ -891,9 +891,22 @@ namespace uniBaterFrenteLoja
            fechaCupom();
         }
 
+        public string tipo = "$";
+        public string valor = "00000000000000";
+
         private void fechaCupom(){
             string meioPagamento = cbFormaPagamento.SelectedValue.ToString();
-            ECFSWEDA.ECF_FechaCupom(meioPagamento, "A", "$", "0000", txtValorPago.Text, "A UNIBATER AGRADECE A PREFERÊNCIA - VOLTE SEMPRE");
+            //ECFSWEDA.ECF_FechaCupom(meioPagamento, "A", "$", "0000", txtValorPago.Text, "A UNIBATER AGRADECE A PREFERÊNCIA - VOLTE SEMPRE");
+            ECFSWEDA.ECF_IniciaFechamentoCupom("A", tipo, valor);
+            ECFSWEDA.ECF_EfetuaFormaPagamento(cbFormaPagamento.SelectedValue.ToString(), txtValorPago.Text);
+            status = ECFSWEDA.ECF_TerminaFechamentoCupom("Volte Sempre!");
+
+            MessageBox.Show(status.ToString());
+
+            StringBuilder valorPago = new StringBuilder(14);
+            ECFSWEDA.ECF_ValorPagoUltimoCupom(valorPago);
+            MessageBox.Show(valorPago.ToString());
+            txtValorPago.ResetText();
          }
     }
 

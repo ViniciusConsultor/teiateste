@@ -58,6 +58,17 @@ namespace uniBaterFrenteLoja
 
             cbTipoCliente.SelectedIndex = 1;
 
+            ar = new ArrayList();
+            ar.Add(new combo("SIM", "T"));
+            ar.Add(new combo("NÃO", "C"));
+
+            cbTroca.DisplayMember = "Nome";
+            cbTroca.ValueMember = "Valor";
+            cbTroca.DataSource = ar;
+
+            cbTroca.SelectedIndex = 0;
+
+
         
             conexao con = new conexao();
 
@@ -299,14 +310,14 @@ namespace uniBaterFrenteLoja
                 {
                     cbBloquear.SelectedIndex = 1;
                 }
-                lblStatusBusca.Text = "";
+                txtDicas.Text = "";
 
                 clienteEncontrado = "1";
 
             }
             catch
             {
-                lblStatusBusca.Text = "Não encontrado";
+                txtDicas.Text = "Cliente não cadastrado.";
                 txtNomeCliente.Text = "";
                 txtTelefone.Text = "";
                 txtCpfCnpj.Text = "";
@@ -361,13 +372,13 @@ namespace uniBaterFrenteLoja
                 {
                     cbBloquear.SelectedIndex = 1;
                 }
-                lblStatusBusca.Text = "";
+                txtDicas.Text = "";
                 clienteEncontrado = "0";
 
             }
             catch
             {
-                lblStatusBusca.Text = "Não encontrado";
+                txtDicas.Text = "Cliente não cadastrado.";
                 txtNomeCliente.Text = "";
                 txtTelefone.Text = "";
                 txtCodigoCliente.Text = "";
@@ -384,7 +395,7 @@ namespace uniBaterFrenteLoja
             MySql objBanco = new MySql();
             try
             {
-                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo from ubestoque,ubprod where etqcod_prod = ubprod.id and ubprod.id = ?id;", parametros);
+                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo,etqde from ubestoque,ubprod where etqcod_prod = ubprod.id and ubprod.id = ?id;", parametros);
 
                
                 float valor = float.Parse(dr[0].ToString());
@@ -397,6 +408,8 @@ namespace uniBaterFrenteLoja
                 txtDescProduto.Text = dr["pdDescProd"].ToString();
                 txtCodBarras.Text = dr["pdOriginal"].ToString();
                 txtAliquota.Text = dr["pdTributo"].ToString();
+                txtDicas.Text = "Quantidade em estoque: " + dr["etqde"].ToString();
+
 
           }
             catch
@@ -489,7 +502,7 @@ namespace uniBaterFrenteLoja
             MySql objBanco = new MySql();
             try
             {
-                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo,ubprod.id from ubestoque,ubprod where etqcod_prod = ubprod.id and pdOriginal = ?id;", parametros);
+                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo,ubprod.id,etqde from ubestoque,ubprod where etqcod_prod = ubprod.id and pdOriginal = ?id;", parametros);
 
                 float valor = float.Parse(dr["etqvalor"].ToString());
                 valor = valor * (float.Parse(lista) / 100);
@@ -500,6 +513,8 @@ namespace uniBaterFrenteLoja
                 txtDescProduto.Text = dr["pdDescProd"].ToString();
                 txtCodProduto.Text = dr["id"].ToString();
                 txtAliquota.Text = dr["pdTributo"].ToString();
+                txtDicas.Text = "Quantidade em estoque: " + dr["etqde"].ToString();
+
 
             }
             catch
@@ -584,7 +599,7 @@ namespace uniBaterFrenteLoja
 
         public void insereCliente() 
         {
-            if ((txtCpfCnpj.Text != "") && (txtNomeCliente.Text != "") && (txtTelefone.Text != ""))
+            if ((txtNomeCliente.Text != "") && (txtTelefone.Text != ""))
             {
                 string bloqueia;
                 if (cbTipoCliente.SelectedIndex == 1)
@@ -647,7 +662,7 @@ namespace uniBaterFrenteLoja
                         cbBloquear.SelectedIndex = 1;
                     }
                     lblStatusBusca.Text = "";
-
+                    txtDicas.Text = "Cliente cadastrado. Código: " + dr[5].ToString().ToUpper();
                     abreCupom();
                 }
                 catch
@@ -907,7 +922,7 @@ namespace uniBaterFrenteLoja
             ECFSWEDA.ECF_ValorPagoUltimoCupom(valorPago);
             MessageBox.Show(valorPago.ToString());
             txtValorPago.ResetText();
-         }
+        }
     }
 
 }

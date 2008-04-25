@@ -388,14 +388,16 @@ namespace uniBaterFrenteLoja
 
         private void textBox1_KeyUp(object sender, KeyEventArgs e)
         {
-            MySqlParameter[] parametros = new MySqlParameter[1];
+            MySqlParameter[] parametros = new MySqlParameter[2];
 
             parametros[0] = new MySqlParameter("?id", txtCodProduto.Text);
+            parametros[1] = new MySqlParameter("?loja", login.idLoja);
+
 
             MySql objBanco = new MySql();
             try
             {
-                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo,etqde from ubestoque,ubprod where etqcod_prod = ubprod.id and ubprod.id = ?id;", parametros);
+                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo,etqde,prodquant from ubestoque,ubprod,ubestoq_lj where ubestoq_lj.cod_lj = ?loja and  ubestoq_lj.cod_prod = ubprod.id  and etqcod_prod = ubprod.id and ubprod.id = ?id", parametros);
 
                
                 float valor = float.Parse(dr[0].ToString());
@@ -408,13 +410,13 @@ namespace uniBaterFrenteLoja
                 txtDescProduto.Text = dr["pdDescProd"].ToString();
                 txtCodBarras.Text = dr["pdOriginal"].ToString();
                 txtAliquota.Text = dr["pdTributo"].ToString();
-                txtDicas.Text = "Quantidade em estoque: " + dr["etqde"].ToString();
+                txtDicas.Text = "Quantidade em estoque: " + dr["prodquant"].ToString();
 
 
           }
             catch
             {
-                lblStatusBusca.Text = "Não encontrado";
+                txtDicas.Text = "Produto não encontrado!";
                 txtValor.Text = "";
                 txtSubTotal.Text = "";
                 txtDescProduto.Text = "";
@@ -495,14 +497,16 @@ namespace uniBaterFrenteLoja
 
         private void txtCodBarras_KeyUp(object sender, KeyEventArgs e)
         {
-            MySqlParameter[] parametros = new MySqlParameter[1];
+            MySqlParameter[] parametros = new MySqlParameter[2];
 
             parametros[0] = new MySqlParameter("?id", txtCodBarras.Text);
+            parametros[1] = new MySqlParameter("?loja", login.idLoja);
+
 
             MySql objBanco = new MySql();
             try
             {
-                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo,ubprod.id,etqde from ubestoque,ubprod where etqcod_prod = ubprod.id and pdOriginal = ?id;", parametros);
+                DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo,etqde,prodquant,ubprod.id from ubestoque,ubprod,ubestoq_lj where ubestoq_lj.cod_lj = ?loja and  ubestoq_lj.cod_prod = ubprod.id  and etqcod_prod = ubprod.id and ubprod.pdOriginal = ?id", parametros);
 
                 float valor = float.Parse(dr["etqvalor"].ToString());
                 valor = valor * (float.Parse(lista) / 100);
@@ -513,13 +517,13 @@ namespace uniBaterFrenteLoja
                 txtDescProduto.Text = dr["pdDescProd"].ToString();
                 txtCodProduto.Text = dr["id"].ToString();
                 txtAliquota.Text = dr["pdTributo"].ToString();
-                txtDicas.Text = "Quantidade em estoque: " + dr["etqde"].ToString();
+                txtDicas.Text = "Quantidade em estoque: " + dr["prodquant"].ToString();
 
 
             }
             catch
             {
-                lblStatusBusca.Text = "Não encontrado";
+                txtDicas.Text = "Produto não encontrado!";
                 txtValor.Text = "";
                 txtSubTotal.Text = "";
                 txtDescProduto.Text = "";
@@ -576,10 +580,12 @@ namespace uniBaterFrenteLoja
             par[2] = new MySqlParameter("?vendaLoja",Convert.ToInt32(login.idLoja));
             par[3] = new MySqlParameter("?vendaOperador",Convert.ToInt32(login.idUsuario));
             par[4] = new MySqlParameter("?vendaLista",lista.Replace(",","."));
-            par[5] = new MySqlParameter("?vendaCategoria", cbFormaPagamento.SelectedValue);
+            par[5] = new MySqlParameter("?vendaCategoria", ++cbFormaPagamento.SelectedIndex);
             par[6] = new MySqlParameter("?vendaCodCli", txtCodigoCliente.Text);
             par[7] = new MySqlParameter("?vendaCOO", coo.ToString());
 
+            stCodVenda.Text = stCodVenda.Text + codVenda.ToString();
+            
             lblCoo.Text = "COO: " + coo.ToString();
 
             objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubvenda (vendaCodigo,vendaCoo,vendaCupom,vendaLoja,vendaCodCli,vendaData,vendaOperador,vendaCategoria,vendaLista) values(?vendaCod,?vendaCOO,'C',?vendaLoja,?vendaCodCli,?vendaData,?vendaOperador,?vendaCategoria,?vendaLista)", par);
@@ -747,8 +753,21 @@ namespace uniBaterFrenteLoja
         private void inserirItem() {
 
            status =  ECFSWEDA.ECF_VendeItem(txtCodProduto.Text, txtDescProduto.Text, txtAliquota.Text, "I", numQtd.Value.ToString(), 2, txtValor.Text, "$", "");
-          // status = ;
-          // MessageBox.Show(st3.ToString());
+
+           if (status == 1)
+           {
+               MySqlParameter[] par = new MySqlParameter[7];
+               par[0] = new MySqlParameter("?cfNome", txtNomeCliente.Text);
+               par[1] = new MySqlParameter("?cfCadastroPJ", txtCpfCnpj.Text);
+               par[2] = new MySqlParameter("?cfDTel", ddd);
+               par[3] = new MySqlParameter("?cfTel", tel);
+               par[4] = new MySqlParameter("?cftipoCli", tipoCliente);
+               par[5] = new MySqlParameter("?cfLoja", login.idLoja);
+               par[6] = new MySqlParameter("?cfStatus", bloqueia);
+               MySql objBanco = new MySql();
+               objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubitem SET itemNumero=?,itemCodigo=?,itemCodBarras?,CodVenda=?,itemQuantidade=?,itemValorBase=?,itemValorVenda=?);", par);
+           }  
+
            if (status != 1) 
            {
                ECFSWEDA.ECF_RetornoImpressoraMFD(ref ack, ref st1, ref st2, ref  st3);
@@ -780,9 +799,6 @@ namespace uniBaterFrenteLoja
 
 
               
-             //44
-             //rtbCupom.Text = rtbCupom.Text + "ITEM CÓDIGO    DESCRIÇÃO                    \n";
-             //rtbCupom.Text = rtbCupom.Text + "QTD.           VL UNIT(R$)       VL ITEM(R$)\n";
                rtbCupom.Text = rtbCupom.Text + item + " " +cod+ descricao + "\n";
                rtbCupom.Text = rtbCupom.Text + qtd + " x     " + valor + subtotal + "\n";
                rtbCupom.Focus();

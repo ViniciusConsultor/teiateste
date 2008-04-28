@@ -20,6 +20,12 @@ namespace uniBaterFrenteLoja
         public string cupomAberto = "0";
         public int status;
         public StringBuilder coo = new StringBuilder(6);
+        decimal valorBase;
+        int codVenda;
+        string quantidadeEmEstoque;
+        int qtdAtual;
+        MySql objBanco = new MySql();
+
 
         //retornoEcf
         int ack, st1, st2, st3;
@@ -79,7 +85,6 @@ namespace uniBaterFrenteLoja
 
             //DataRow dr = con.executarComando("Select ubloja.ljNome,ubfuncionario.fcNome from ubloja,ubfuncionario where ubloja.id = ?idl and ubfuncionario.id =?idf", parametros);
 
-            MySql objBanco = new MySql();
 
             DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "Select ubloja.ljNome,ubfuncionario.fcNome,ubloja.ljLista from ubloja,ubfuncionario where ubloja.id = ?idl and ubfuncionario.id =?idf", parametros);
 
@@ -97,7 +102,6 @@ namespace uniBaterFrenteLoja
         }
 
         public void getListaComissao() {
-            MySql objBanco = new MySql();
             MySqlParameter[] lojaParametros = new MySqlParameter[1];
             lojaParametros[0] = new MySqlParameter("?lojaId", login.idLoja);
             lista = objBanco.RetornaDataRow(conexao, CommandType.Text, "select valor from ubloja,ubListaComissao where ubloja.id = ?lojaId and ubListaComissao.id = ubloja.ljLista", lojaParametros).ItemArray[0].ToString();
@@ -169,7 +173,6 @@ namespace uniBaterFrenteLoja
 
         public void comprarBateria(){
             //Gera numero compra
-            MySql objBanco = new MySql();
             
 
             if (compraSucata == false)
@@ -286,7 +289,6 @@ namespace uniBaterFrenteLoja
 
             parametros[0] = new MySqlParameter("?id", txtCodigoCliente.Text);
 
-            MySql objBanco = new MySql();
             try
             {
                 DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT cfnome,cfdtel,cftel,cfCadastroPJ,cftipocli,cfstatus from ubclifor where id = ?id;", parametros);
@@ -347,7 +349,6 @@ namespace uniBaterFrenteLoja
 
             parametros[0] = new MySqlParameter("?id", txtCpfCnpj.Text);
 
-            MySql objBanco = new MySql();
             try
             {
                 DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT cfnome,cfdtel,cftel,cfCadastroPJ,cftipocli,id,cfstatus from ubclifor where cfCadastroPJ = ?id;", parametros);
@@ -394,23 +395,24 @@ namespace uniBaterFrenteLoja
             parametros[1] = new MySqlParameter("?loja", login.idLoja);
 
 
-            MySql objBanco = new MySql();
             try
             {
                 DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo,etqde,prodquant from ubestoque,ubprod,ubestoq_lj where ubestoq_lj.cod_lj = ?loja and  ubestoq_lj.cod_prod = ubprod.id  and etqcod_prod = ubprod.id and ubprod.id = ?id", parametros);
 
                
-                float valor = float.Parse(dr[0].ToString());
-                valor = valor * (float.Parse(lista) / 100);
+                decimal valor = decimal.Parse(dr[0].ToString());
+                valorBase = valor;
+                valor = valor * (decimal.Parse(lista) / 100);
 
-                float subTotal = valor * float.Parse(numQtd.Value.ToString());
+                decimal subTotal = valor * decimal.Parse(numQtd.Value.ToString());
                
                 txtValor.Text = string.Format("{0:n2}", valor);
                 txtSubTotal.Text = string.Format("{0:n2}", subTotal);
                 txtDescProduto.Text = dr["pdDescProd"].ToString();
                 txtCodBarras.Text = dr["pdOriginal"].ToString();
                 txtAliquota.Text = dr["pdTributo"].ToString();
-                txtDicas.Text = "Quantidade em estoque: " + dr["prodquant"].ToString();
+                quantidadeEmEstoque = dr["prodquant"].ToString();
+                txtDicas.Text = "Quantidade em estoque: " + quantidadeEmEstoque;
 
 
           }
@@ -432,7 +434,7 @@ namespace uniBaterFrenteLoja
         }
         public void atualizaPreco(EventArgs e) 
         {
-            float subTotal = float.Parse(numQtd.Value.ToString()) * float.Parse(txtValor.Text);
+            decimal subTotal = decimal.Parse(numQtd.Value.ToString()) * decimal.Parse(txtValor.Text);
             txtSubTotal.Text = string.Format("{0:n2}", subTotal);
         }
 
@@ -503,21 +505,23 @@ namespace uniBaterFrenteLoja
             parametros[1] = new MySqlParameter("?loja", login.idLoja);
 
 
-            MySql objBanco = new MySql();
             try
             {
                 DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "SELECT etqvalor,pdDescProd,pdOriginal,pdTributo,etqde,prodquant,ubprod.id from ubestoque,ubprod,ubestoq_lj where ubestoq_lj.cod_lj = ?loja and  ubestoq_lj.cod_prod = ubprod.id  and etqcod_prod = ubprod.id and ubprod.pdOriginal = ?id", parametros);
 
-                float valor = float.Parse(dr["etqvalor"].ToString());
-                valor = valor * (float.Parse(lista) / 100);
-                float subTotal = valor * float.Parse(numQtd.Value.ToString());
+               
+                decimal valor = decimal.Parse(dr["etqvalor"].ToString());
+                decimal valorBase = valor;
+                valor = valor * (decimal.Parse(lista) / 100);
+                decimal subTotal = valor * decimal.Parse(numQtd.Value.ToString());
 
                 txtValor.Text = string.Format("{0:n2}", valor);
                 txtSubTotal.Text = string.Format("{0:n2}", subTotal);
                 txtDescProduto.Text = dr["pdDescProd"].ToString();
                 txtCodProduto.Text = dr["id"].ToString();
                 txtAliquota.Text = dr["pdTributo"].ToString();
-                txtDicas.Text = "Quantidade em estoque: " + dr["prodquant"].ToString();
+                quantidadeEmEstoque = dr["prodquant"].ToString();
+                txtDicas.Text = "Quantidade em estoque: " + quantidadeEmEstoque;
 
 
             }
@@ -569,18 +573,18 @@ namespace uniBaterFrenteLoja
             
 
             //Gera numero da venda
-            MySql objBanco = new MySql();            
             int result= Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select count(*) from ubvenda").ItemArray[0]);
-            int codVenda = ++result;
-
+            codVenda = ++result;
             //Grava dados da Venda
+            int meioPag = cbFormaPagamento.SelectedIndex;
+
             MySqlParameter[] par = new MySqlParameter[8];
             par[0] = new MySqlParameter("?vendaCod",codVenda);
             par[1] = new MySqlParameter("?vendaData",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             par[2] = new MySqlParameter("?vendaLoja",Convert.ToInt32(login.idLoja));
             par[3] = new MySqlParameter("?vendaOperador",Convert.ToInt32(login.idUsuario));
             par[4] = new MySqlParameter("?vendaLista",lista.Replace(",","."));
-            par[5] = new MySqlParameter("?vendaCategoria", ++cbFormaPagamento.SelectedIndex);
+            par[5] = new MySqlParameter("?vendaCategoria", ++meioPag);
             par[6] = new MySqlParameter("?vendaCodCli", txtCodigoCliente.Text);
             par[7] = new MySqlParameter("?vendaCOO", coo.ToString());
 
@@ -638,7 +642,6 @@ namespace uniBaterFrenteLoja
                 par[4] = new MySqlParameter("?cftipoCli", tipoCliente);
                 par[5] = new MySqlParameter("?cfLoja", login.idLoja);
                 par[6] = new MySqlParameter("?cfStatus", bloqueia);
-                MySql objBanco = new MySql();
                 objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubclifor (cfNome,cfCadastroPJ,cfDTel,cfTel,cftipoCli,cfLoja,cfStatus) VALUES(?cfNome,?cfCadastroPJ,?cfDTel,?cfTel,?cftipoCli,?cfLoja,?cfStatus);", par);
 
                 try
@@ -747,34 +750,74 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox6_Click(object sender, EventArgs e)
         {
-            inserirItem();
+            try
+            {
+                inserirItem();
+            }
+            catch { }
         }
 
         private void inserirItem() {
 
-           status =  ECFSWEDA.ECF_VendeItem(txtCodProduto.Text, txtDescProduto.Text, txtAliquota.Text, "I", numQtd.Value.ToString(), 2, txtValor.Text, "$", "");
 
-           if (status == 1)
+
+               int result = Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select count(*) from ubvenda").ItemArray[0]);
+
+               MySqlParameter[] par0 = new MySqlParameter[2];
+               par0[0] = new MySqlParameter("?itemCodigo", txtCodProduto.Text);
+               par0[1] = new MySqlParameter("?codVenda", result);
+               
+            string qtdItem = objBanco.RetornaDataRow(conexao, CommandType.Text, "select  count(distinct itemCodigo) * sum(itemQuantidade) itens from ubitem where itemCodigo = ?itemCodigo and codVenda= ?codVenda and cancelado = 0", par0)[0].ToString();
+
+            if (qtdItem == ""){
+                qtdItem = "0";            
+            }
+
+            int semEstoque = 0;
+
+            if (Int32.Parse(quantidadeEmEstoque) < (Int32.Parse(qtdItem) + numQtd.Value))
+            {
+                semEstoque = 1;
+
+                txtDicas.Text = "Estoque Insuficiente!";
+                return;
+            }
+
+            status = ECFSWEDA.ECF_VendeItem(txtCodProduto.Text, txtDescProduto.Text, txtAliquota.Text, "I", numQtd.Value.ToString(), 2, txtValor.Text, "$", "");
+
+
+            if (status == 1 && semEstoque != 1)
            {
+               StringBuilder numeroItem = new StringBuilder(4);
+               status = ECFSWEDA.ECF_UltimoItemVendido(numeroItem);
+
+
                MySqlParameter[] par = new MySqlParameter[7];
-               par[0] = new MySqlParameter("?cfNome", txtNomeCliente.Text);
-               par[1] = new MySqlParameter("?cfCadastroPJ", txtCpfCnpj.Text);
-               par[2] = new MySqlParameter("?cfDTel", ddd);
-               par[3] = new MySqlParameter("?cfTel", tel);
-               par[4] = new MySqlParameter("?cftipoCli", tipoCliente);
-               par[5] = new MySqlParameter("?cfLoja", login.idLoja);
-               par[6] = new MySqlParameter("?cfStatus", bloqueia);
-               MySql objBanco = new MySql();
-               objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubitem SET itemNumero=?,itemCodigo=?,itemCodBarras?,CodVenda=?,itemQuantidade=?,itemValorBase=?,itemValorVenda=?);", par);
+               par[0] = new MySqlParameter("?itemNumero", numeroItem.ToString());
+               par[1] = new MySqlParameter("?itemCodigo",txtCodProduto.Text );
+               par[2] = new MySqlParameter("?itemCodBarras", txtCodBarras.Text);
+               par[3] = new MySqlParameter("?CodVenda", result);
+               par[4] = new MySqlParameter("?itemQuantidade",numQtd.Value);
+               par[5] = new MySqlParameter("?itemValorBase",valorBase);
+               par[6] = new MySqlParameter("?itemValorVenda",txtValor.Text.Replace(",","."));
+               objBanco.ExecuteNonQuery(conexao, CommandType.Text,"INSERT INTO ubitem SET itemNumero=?itemNumero,itemCodigo=?itemCodigo,itemCodBarras=?itemCodBarras,CodVenda=?CodVenda,itemQuantidade=?itemQuantidade,itemValorBase=?itemValorBase,itemValorVenda=?itemValorVenda;", par);
            }  
 
-           if (status != 1) 
+           if (status != 1 ) 
            {
                ECFSWEDA.ECF_RetornoImpressoraMFD(ref ack, ref st1, ref st2, ref  st3);
                MessageBox.Show("ERRO: " + st3.ToString());
-           }
+
+          }
            else
            {
+
+               if (semEstoque != 1)
+               {
+
+                   qtdAtual = Int32.Parse(quantidadeEmEstoque) - (Int32.Parse(qtdItem) + Int32.Parse(numQtd.Value.ToString()));
+                   txtDicas.Text = "Estoque Atual: " + qtdAtual.ToString();
+
                StringBuilder item = new StringBuilder(4);
                ECFSWEDA.ECF_UltimoItemVendido(item);
                int count = txtDescProduto.Text.Length;
@@ -805,6 +848,7 @@ namespace uniBaterFrenteLoja
                rtbCupom.Select(rtbCupom.Text.Length, 0);
 
                subTotal();
+              }
            }
         }
 
@@ -936,8 +980,58 @@ namespace uniBaterFrenteLoja
 
             StringBuilder valorPago = new StringBuilder(14);
             ECFSWEDA.ECF_ValorPagoUltimoCupom(valorPago);
-            MessageBox.Show(valorPago.ToString());
+            string valorPagoA = valorPago.ToString();
+            string valorPagoP = valorPagoA.Substring(0, 12);
+            string valorPagoS = valorPagoA.Substring(12, 2);
+            valorPagoA = valorPagoP + "," + valorPagoS;
+            decimal valorPagoD = Convert.ToDecimal(valorPagoA);
             txtValorPago.ResetText();
+           
+            StringBuilder subTotal = new StringBuilder(14);
+            ECFSWEDA.ECF_SubTotal(subTotal);
+
+            string subTotalA = subTotal.ToString();
+ 
+            subTotalA = subTotalA.Insert(12,",");
+            decimal subTotalD = Convert.ToDecimal(subTotalA);
+
+            if (valorPagoD < subTotalD)
+            {
+                decimal valorFaltante = subTotalD - valorPagoD;
+                txtDicas.Text = "Faltam: R$" + valorFaltante.ToString();
+            }
+            else 
+            {
+                if (valorPagoD > subTotalD) { 
+                decimal troco = valorPagoD - subTotalD;
+                txtTroco.Text = troco.ToString();
+                
+                }
+                txtDicas.Text = "Obrigado! Volte Sempre!";
+            }
+
+        }
+
+        private void pictureBox10_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void pictureBox11_Click(object sender, EventArgs e)
+        {
+            status = ECFSWEDA.ECF_CancelaItemAnterior();
+            if (status == 1)
+            {
+                try
+                {
+                    DataRow dr = objBanco.RetornaDataRow(conexao, CommandType.Text, "select  id from ubitem order by id desc limit 1");
+                    MySqlParameter[] par = new MySqlParameter[1];
+                    par[0] = new MySqlParameter("?id", dr["id"]);
+                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, "UPDATE ubitem set cancelado = 1 where id = ?id", par);
+                }
+                catch
+                {
+                }
+            }
         }
     }
 

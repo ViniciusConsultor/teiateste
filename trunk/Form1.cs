@@ -174,6 +174,8 @@ namespace uniBaterFrenteLoja
                 result = Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select id from ubvencomsucata order by id desc").ItemArray[0]);
                 codCompraBateria = ++result;
 
+                tsCodigoCompra.Text = "CÓDIGO DA COMPRA: " + codCompraBateria;
+
                 ///compra sucata
                 MySqlParameter[] parametros = new MySqlParameter[6];
                 parametros[0] = new MySqlParameter("?id", codCompraBateria);
@@ -191,11 +193,12 @@ namespace uniBaterFrenteLoja
 
             result = Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select id from ubitemsucata order by id desc").ItemArray[0]);
             int codCompraItemSucata = ++result;
-            int codProduto = cbTipoBateria.SelectedIndex; 
+            int codProduto = cbTipoBateria.SelectedIndex;
+            codProduto = ++codProduto;
             //item sucata
             MySqlParameter[] parametrosItem = new MySqlParameter[7];
             parametrosItem[0] = new MySqlParameter("?id", codCompraItemSucata);
-            parametrosItem[1] = new MySqlParameter("?itprod", ++codProduto);
+            parametrosItem[1] = new MySqlParameter("?itprod", codProduto);
             parametrosItem[2] = new MySqlParameter("?itquant", numQtdCompra.Value);
             parametrosItem[3] = new MySqlParameter("?itvalor", txtValorCompra.Text.Replace(",","."));
             parametrosItem[4] = new MySqlParameter("?itsubtotal", txtSubTotalCompra.Text.Replace(",", "."));
@@ -213,6 +216,32 @@ namespace uniBaterFrenteLoja
             DataTable tabelaSucata = new DataTable();
             tabelaSucata = objBanco.RetornaDataTable(conexao, CommandType.Text, comando, parametrosDGV);
             dgvBateriasCompra.DataSource = tabelaSucata;
+
+
+            MySqlParameter[] parEstoq = new MySqlParameter[2];
+            parEstoq[0] = new MySqlParameter("?loja", login.idLoja);
+            parEstoq[1] = new MySqlParameter("?produto", codProduto);
+
+            comando = "select count(id) from  ubestoq_sucata where esljsu = ?loja and esprodsu = ?produto";
+            int numLinhas = Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, comando, parEstoq)[0]);
+
+            MySqlParameter[] parEstoqIns = new MySqlParameter[3];
+            parEstoqIns[0] = new MySqlParameter("?loja", login.idLoja);
+            parEstoqIns[1] = new MySqlParameter("?produto", codProduto);
+            parEstoqIns[2] = new MySqlParameter("?qtd", numQtdCompra.Value);
+
+            if (numLinhas < 1)
+            {
+                comando = "Insert into ubestoq_sucata set esprodsu = ?produto, esljsu = ?loja, esquantsu = ?qtd";
+                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parEstoqIns);
+            }
+            else 
+            {
+                comando = "Update ubestoq_sucata set   esquantsu = esquantsu + ?qtd where esprodsu = ?produto and  esljsu = ?loja";
+                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parEstoqIns);
+            }
+
+
         
         }
 

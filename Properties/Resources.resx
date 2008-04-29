@@ -118,11 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnItemAnterior" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnItemAnterior.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="total" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\total.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="btNCancelaCupom" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btNCancelaCupom.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="btnDel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnDel.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="btnAdd" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btnAdd.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -133,17 +139,14 @@
   <data name="equal" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\equal.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="bg" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\img\bg.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="topo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\img\topo.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="btnOrcamento" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btnOrcamento.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="btnCupomFiscal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\img\btnCupomFiscal.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="bg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\img\bg.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="byteiapp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\byteiapp.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -160,6 +163,9 @@
   <data name="multiplica" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\multiplica.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="btnCupomFiscal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnCupomFiscal.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="btnFechaCupom" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btnFechaCupom.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -172,7 +178,10 @@
   <data name="btnAbreCupomap" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btnAbreCupomap.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="btnItemAnterior" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\img\btnItemAnterior.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="btnNew" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnNew.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="btnCan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnCan.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

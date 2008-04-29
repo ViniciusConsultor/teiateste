@@ -25,6 +25,7 @@ namespace uniBaterFrenteLoja
         string quantidadeEmEstoque;
         int qtdAtual;
         MySql objBanco = new MySql();
+        string sucataSelecionada = "";
 
 
         //retornoEcf
@@ -37,6 +38,7 @@ namespace uniBaterFrenteLoja
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
 
             int abrePorta = ECFSWEDA.ECF_AbrePortaSerial();
             if (abrePorta == 1) {
@@ -64,15 +66,7 @@ namespace uniBaterFrenteLoja
 
             cbTipoCliente.SelectedIndex = 1;
 
-            ar = new ArrayList();
-            ar.Add(new combo("SIM", "T"));
-            ar.Add(new combo("NÃO", "C"));
-
-            cbTroca.DisplayMember = "Nome";
-            cbTroca.ValueMember = "Valor";
-            cbTroca.DataSource = ar;
-
-            cbTroca.SelectedIndex = 0;
+            cbTroca.SelectedIndex = 1;
 
 
         
@@ -189,6 +183,7 @@ namespace uniBaterFrenteLoja
                 parametros[4] = new MySqlParameter("?loja", login.idLoja);
                 parametros[5] = new MySqlParameter("?funcionario", login.idUsuario);
 
+
                 comando = "INSERT INTO ubvencomsucata SET id=?id, sunome=?nome, suPj=?doc, suDia=?data, suLoja=?loja, suFunc=?funcionario,sutipo='1'";
                 objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parametros);
                 compraSucata = true;
@@ -198,21 +193,23 @@ namespace uniBaterFrenteLoja
             int codCompraItemSucata = ++result;
             int codProduto = cbTipoBateria.SelectedIndex; 
             //item sucata
-            MySqlParameter[] parametrosItem = new MySqlParameter[6];
+            MySqlParameter[] parametrosItem = new MySqlParameter[7];
             parametrosItem[0] = new MySqlParameter("?id", codCompraItemSucata);
             parametrosItem[1] = new MySqlParameter("?itprod", ++codProduto);
             parametrosItem[2] = new MySqlParameter("?itquant", numQtdCompra.Value);
             parametrosItem[3] = new MySqlParameter("?itvalor", txtValorCompra.Text.Replace(",","."));
             parametrosItem[4] = new MySqlParameter("?itsubtotal", txtSubTotalCompra.Text.Replace(",", "."));
             parametrosItem[5] = new MySqlParameter("?itvencomsucata", codCompraBateria);
+            parametrosItem[6] = new MySqlParameter("?baseTroca", cbTroca.SelectedIndex.ToString());
 
-            comando = "INSERT INTO ubitemsucata SET id=?id, itprod=?itprod, itquant=?itquant, itvalor=?itvalor, itsubtotal=?itsubtotal, itvencomsucata=?itvencomsucata";
+
+            comando = "INSERT INTO ubitemsucata SET id=?id, itprod=?itprod, itquant=?itquant, itvalor=?itvalor, itsubtotal=?itsubtotal, itvencomsucata=?itvencomsucata,baseTroca = ?baseTroca";
             objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parametrosItem);
 
             MySqlParameter[] parametrosDGV= new MySqlParameter[1];
             parametrosDGV[0] = new MySqlParameter("?venda", codCompraBateria);
 
-            comando = "SELECT itvencomsucata 'COD. VENDAS',suprod 'PRODUTO',itquant 'QUANTIDADE', itvalor 'VALOR',itsubtotal 'SUBTOTAL'  FROM ubitemsucata,ubsucataprod WHERE itvencomsucata = ?venda and ubitemsucata.itprod = ubsucataprod.id order by ubitemsucata.id desc  ";
+            comando = "SELECT ubitemsucata.id 'ID',itvencomsucata 'COD. VENDAS',suprod 'PRODUTO',itquant 'QUANTIDADE', itvalor 'VALOR',itsubtotal 'SUBTOTAL'  FROM ubitemsucata,ubsucataprod WHERE itvencomsucata = ?venda and ubitemsucata.itprod = ubsucataprod.id order by ubitemsucata.id desc  ";
             DataTable tabelaSucata = new DataTable();
             tabelaSucata = objBanco.RetornaDataTable(conexao, CommandType.Text, comando, parametrosDGV);
             dgvBateriasCompra.DataSource = tabelaSucata;
@@ -588,7 +585,7 @@ namespace uniBaterFrenteLoja
             par[6] = new MySqlParameter("?vendaCodCli", txtCodigoCliente.Text);
             par[7] = new MySqlParameter("?vendaCOO", coo.ToString());
 
-            stCodVenda.Text = stCodVenda.Text + codVenda.ToString();
+            stCodVenda.Text = "CÓDIGO DA VENDA: " + codVenda.ToString();
             
             lblCoo.Text = "COO: " + coo.ToString();
 
@@ -1002,18 +999,37 @@ namespace uniBaterFrenteLoja
             }
             else 
             {
-                if (valorPagoD > subTotalD) { 
+                if (valorPagoD > subTotalD)
+                { 
                 decimal troco = valorPagoD - subTotalD;
                 txtTroco.Text = troco.ToString();
-                
                 }
                 txtDicas.Text = "Obrigado! Volte Sempre!";
+                MySqlParameter[] param = new MySqlParameter[1];
+                param[0] = new MySqlParameter("?vendaCodigo", codVenda);
+                objBanco.ExecuteNonQuery(conexao, CommandType.Text, "UPDATE ubvenda set vendaFinalizada = 1 where vendaCodigo=?vendaCodigo", param);
+                DataTable dt = objBanco.RetornaDataTable(conexao, CommandType.Text, "SELECT itemCodigo,sum(itemQuantidade) from ubitem where codvenda = ?vendaCodigo and cancelado <> 1 GROUP by itemCodigo", param);
+                int numeroLinhas = dt.Rows.Count;
+                DataRow dr;
+
+                MySqlParameter[] parametros = new MySqlParameter[3];
+
+                for (int i = 0; i < numeroLinhas; i++)
+                {
+                    dr = dt.Rows[i];
+                    parametros[0] = new MySqlParameter("?cod_prod", dr[0].ToString());
+                    parametros[1] = new MySqlParameter("?qtd", dr[1].ToString());
+                    parametros[2] = new MySqlParameter("?cod_lj", login.idLoja);
+                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, "update ubestoq_lj set prodquant = prodquant - ?qtd where cod_lj = ?cod_lj and cod_prod = ?cod_prod", parametros);
+                }
+
             }
 
         }
 
         private void pictureBox10_Click(object sender, EventArgs e)
         {
+
         }
 
         private void pictureBox11_Click(object sender, EventArgs e)
@@ -1032,6 +1048,28 @@ namespace uniBaterFrenteLoja
                 {
                 }
             }
+        }
+
+        private void dgvBateriasCompra_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                sucataSelecionada = dgvBateriasCompra.SelectedRows[0].Cells[0].Value.ToString();
+            }
+            catch 
+            {
+            }
+        }
+
+        private void pictureBox12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox14_Click(object sender, EventArgs e)
+        {
+            compraSucata = false;
+            dgvBateriasCompra.DataSource = null;
         }
     }
 

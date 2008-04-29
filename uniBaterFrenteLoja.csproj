@@ -155,6 +155,15 @@
     <None Include="bin\Debug\img\btnItemAnterior.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Debug\img\btnDel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\img\btnNew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\img\btnCan.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

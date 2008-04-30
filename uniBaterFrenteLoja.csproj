@@ -164,6 +164,9 @@
     <None Include="bin\Debug\img\btnCan.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Debug\img\btnCanA.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Properties\DataSources\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

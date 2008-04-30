@@ -16,11 +16,16 @@ using System.Text;
    public class ECFSWEDA
     {        
           
+    [DllImport("Convecf.dll")]
+       public static extern int ECF_NumeroCaixa(StringBuilder caixa);
+       
+
 
         #region Funções de Inicialização
         //**********************************************************//		
         [DllImport("Convecf.dll")]
         public static extern int ECF_AlteraSimboloMoeda(string SimbMoeda);
+
 
         [DllImport("Convecf.dll")]
         public static extern int ECF_ProgramaAliquota(string Aliq, int ICMS_ISS);

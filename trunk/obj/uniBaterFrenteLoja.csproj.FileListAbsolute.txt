@@ -14,9 +14,9 @@ C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Un
 C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\bin\Debug\uniBaterFrenteLoja.pdb
 C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\obj\Debug\ResolveAssemblyReference.cache
 C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\obj\Debug\uniBaterFrenteLoja.Form1.resources
-C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\obj\Debug\uniBaterFrenteLoja.Form2.resources
 C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\obj\Debug\uniBaterFrenteLoja.login.resources
 C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\obj\Debug\uniBaterFrenteLoja.Properties.Resources.resources
 C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\obj\Debug\uniBaterFrenteLoja.csproj.GenerateResource.Cache
 C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\obj\Debug\uniBaterFrenteLoja.exe
 C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\obj\Debug\uniBaterFrenteLoja.pdb
+C:\Documents and Settings\leandro\Meus documentos\Visual Studio 2005\Projects\Unibater\obj\Debug\uniBaterFrenteLoja.frmCancItem.resources

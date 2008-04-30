@@ -102,6 +102,13 @@ namespace uniBaterFrenteLoja.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap btnCanA {
+            get {
+                object obj = ResourceManager.GetObject("btnCanA", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap btNCancelaCupom {
             get {
                 object obj = ResourceManager.GetObject("btNCancelaCupom", resourceCulture);

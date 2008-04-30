@@ -21,11 +21,14 @@ namespace uniBaterFrenteLoja
         public int status;
         public StringBuilder coo = new StringBuilder(6);
         decimal valorBase;
-        int codVenda;
+        public int codVenda;
         string quantidadeEmEstoque;
         int qtdAtual;
         MySql objBanco = new MySql();
         string sucataSelecionada = "";
+        StringBuilder caixa = new StringBuilder(4);
+        string itemSel;
+
 
 
         //retornoEcf
@@ -45,6 +48,68 @@ namespace uniBaterFrenteLoja
                 ECFSWEDA.ECF_ZAUTO("1");
                 MessageBox.Show("Porta Aberta!");
             }
+
+            ECFSWEDA.ECF_NumeroCaixa(caixa);
+
+            try
+            {
+                MySqlParameter[] parametros1 = new MySqlParameter[2];
+
+                parametros1[0] = new MySqlParameter("?caixa", caixa.ToString());
+                parametros1[1] = new MySqlParameter("?loja", login.idLoja);
+
+                string comandoT = "select vendaCodigo, vendaCoo,VendaCodCli from ubvenda where caixa = ?caixa and vendaLoja = ?loja and vendaFinalizada <> 1 and vendaFinalizada <> 2 and vendaCupom ='C' order by vendaCodigo desc limit 1";
+                DataRow drCupom =  objBanco.RetornaDataRow(conexao, CommandType.Text, comandoT, parametros1);
+
+                codVenda = Convert.ToInt32(drCupom["vendaCodigo"]);
+                stCodVenda.Text = "CÓDIGO DA VENDA: " + codVenda.ToString();
+                string cooCupom = drCupom["vendaCoo"].ToString();
+                lblCoo.Text = "COO: " + cooCupom;
+
+
+
+                atualizarItensCancelar(codVenda);
+
+                MySqlParameter[] parametros2 = new MySqlParameter[1];
+
+                parametros2[0] = new MySqlParameter("?Cliente", drCupom[2].ToString());
+
+
+                string comandoC = "select id,cfNome, cfDTel, cfTel, cfCadastroPJ, cftipoCli,cfStatus  from ubclifor where id = ?Cliente";
+                DataRow drCliente = objBanco.RetornaDataRow(conexao, CommandType.Text, comandoC, parametros2);
+                txtCodigoCliente.Text = drCliente["id"].ToString();
+                txtNomeCliente.Text = drCliente["cfNome"].ToString().ToUpper();
+                txtTelefone.Text = drCliente["cfDTel"].ToString().ToUpper() + drCliente["cfTel"].ToString().ToUpper();
+                txtCpfCnpj.Text = drCliente["cfCadastroPJ"].ToString().ToUpper();
+                if (drCliente[4].ToString().ToUpper() == "V")
+                {
+                    cbTipoCliente.SelectedIndex = 1;
+                }
+                if (drCliente["cftipoCli"].ToString().ToUpper() == "A")
+                {
+                    cbTipoCliente.SelectedIndex = 0;
+                }
+
+                if (drCliente["cfStatus"].ToString().ToUpper() == "B")
+                {
+                    cbBloquear.SelectedIndex = 0;
+                }
+                if (drCliente["cfStatus"].ToString().ToUpper() == "D")
+                {
+                    cbBloquear.SelectedIndex = 1;
+                }
+
+                
+                
+                
+             
+            }
+            catch
+            {
+
+            }
+
+
 
             ArrayList ar = new ArrayList();
             ar.Add(new combo("Bloqueado","B"));
@@ -212,7 +277,7 @@ namespace uniBaterFrenteLoja
             MySqlParameter[] parametrosDGV= new MySqlParameter[1];
             parametrosDGV[0] = new MySqlParameter("?venda", codCompraBateria);
 
-            comando = "SELECT ubitemsucata.id 'ID',itvencomsucata 'COD. VENDAS',suprod 'PRODUTO',itquant 'QUANTIDADE', itvalor 'VALOR',itsubtotal 'SUBTOTAL'  FROM ubitemsucata,ubsucataprod WHERE itvencomsucata = ?venda and ubitemsucata.itprod = ubsucataprod.id order by ubitemsucata.id desc  ";
+            comando = "SELECT ubitemsucata.id 'ID',itvencomsucata 'CODIGO',suprod 'PRODUTO',itquant 'QUANTIDADE', itvalor 'VALOR',itsubtotal 'SUBTOTAL'  FROM ubitemsucata,ubsucataprod WHERE itvencomsucata = ?venda and ubitemsucata.itprod = ubsucataprod.id order by ubitemsucata.id desc  ";
             DataTable tabelaSucata = new DataTable();
             tabelaSucata = objBanco.RetornaDataTable(conexao, CommandType.Text, comando, parametrosDGV);
             dgvBateriasCompra.DataSource = tabelaSucata;
@@ -584,6 +649,8 @@ namespace uniBaterFrenteLoja
 
             if (status == 1) {
             ECFSWEDA.ECF_RetornaCOO(coo);
+            txtTotal.Text = "0,00";
+            txtTroco.Text = "0,00";
             }
 
             if (status != 1)
@@ -602,9 +669,12 @@ namespace uniBaterFrenteLoja
             int result= Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select count(*) from ubvenda").ItemArray[0]);
             codVenda = ++result;
             //Grava dados da Venda
+            atualizarItensCancelar(codVenda);
             int meioPag = cbFormaPagamento.SelectedIndex;
 
-            MySqlParameter[] par = new MySqlParameter[8];
+            ECFSWEDA.ECF_NumeroCaixa(caixa);           
+            
+            MySqlParameter[] par = new MySqlParameter[9];
             par[0] = new MySqlParameter("?vendaCod",codVenda);
             par[1] = new MySqlParameter("?vendaData",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             par[2] = new MySqlParameter("?vendaLoja",Convert.ToInt32(login.idLoja));
@@ -613,22 +683,14 @@ namespace uniBaterFrenteLoja
             par[5] = new MySqlParameter("?vendaCategoria", ++meioPag);
             par[6] = new MySqlParameter("?vendaCodCli", txtCodigoCliente.Text);
             par[7] = new MySqlParameter("?vendaCOO", coo.ToString());
+            par[8] = new MySqlParameter("?caixa", caixa.ToString());
+            
 
             stCodVenda.Text = "CÓDIGO DA VENDA: " + codVenda.ToString();
             
             lblCoo.Text = "COO: " + coo.ToString();
 
-            objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubvenda (vendaCodigo,vendaCoo,vendaCupom,vendaLoja,vendaCodCli,vendaData,vendaOperador,vendaCategoria,vendaLista) values(?vendaCod,?vendaCOO,'C',?vendaLoja,?vendaCodCli,?vendaData,?vendaOperador,?vendaCategoria,?vendaLista)", par);
-            rtbCupom.Text = rtbCupom.Text + "============================================\n";
-            rtbCupom.Text = rtbCupom.Text + "    DAVID MARCOS RODRIGUES BATERIAS EPP.\n";
-            rtbCupom.Text = rtbCupom.Text + "        AV. DR. JOÃO GUIMARÃES, 735\n";
-            rtbCupom.Text = rtbCupom.Text + "               SÃO PAULO - SP\n";
-            rtbCupom.Text = rtbCupom.Text + "CNPJ:68.955.459/0005-06   IE:149.831.779.113\n";
-            rtbCupom.Text = rtbCupom.Text + "============================================\n";
-            rtbCupom.Text = rtbCupom.Text + "ITEM CÓDIGO    DESCRIÇÃO                    \n";
-            rtbCupom.Text = rtbCupom.Text + "QTD.           VL UNIT(R$)       VL ITEM(R$)\n";
-            rtbCupom.Focus();
-            rtbCupom.Select(rtbCupom.Text.Length, 0);
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubvenda (vendaCodigo,vendaCoo,vendaCupom,vendaLoja,vendaCodCli,vendaData,vendaOperador,vendaCategoria,vendaLista,caixa) values(?vendaCod,?vendaCOO,'C',?vendaLoja,?vendaCodCli,?vendaData,?vendaOperador,?vendaCategoria,?vendaLista,?caixa)", par);
             
 
         }
@@ -774,6 +836,18 @@ namespace uniBaterFrenteLoja
             }
         }
 
+        public void atualizarItensCancelar(int cod)
+        {
+            codVenda = cod;
+
+            MySqlParameter[] parametros = new MySqlParameter[1];
+            parametros[0] = new MySqlParameter("?codVenda", cod);
+
+            string comando = "select itemNumero NUMERO, itemCodigo CODIGO, itemQuantidade QTD, itemValorVenda VALOR from ubitem where codVenda = ?codVenda and cancelado <> 1";
+            DataTable dt = objBanco.RetornaDataTable(conexao, CommandType.Text, comando, parametros);
+            dgvItens.DataSource = dt;
+        }
+
         private void pictureBox6_Click(object sender, EventArgs e)
         {
             try
@@ -827,7 +901,11 @@ namespace uniBaterFrenteLoja
                par[5] = new MySqlParameter("?itemValorBase",valorBase);
                par[6] = new MySqlParameter("?itemValorVenda",txtValor.Text.Replace(",","."));
                objBanco.ExecuteNonQuery(conexao, CommandType.Text,"INSERT INTO ubitem SET itemNumero=?itemNumero,itemCodigo=?itemCodigo,itemCodBarras=?itemCodBarras,CodVenda=?CodVenda,itemQuantidade=?itemQuantidade,itemValorBase=?itemValorBase,itemValorVenda=?itemValorVenda;", par);
-           }  
+
+               atualizarItensCancelar(codVenda);
+            
+            
+            }  
 
            if (status != 1 ) 
            {
@@ -866,13 +944,6 @@ namespace uniBaterFrenteLoja
 
                string subtotal = txtSubTotal.Text.ToString();
 
-
-              
-               rtbCupom.Text = rtbCupom.Text + item + " " +cod+ descricao + "\n";
-               rtbCupom.Text = rtbCupom.Text + qtd + " x     " + valor + subtotal + "\n";
-               rtbCupom.Focus();
-               rtbCupom.Select(rtbCupom.Text.Length, 0);
-
                subTotal();
               }
            }
@@ -888,7 +959,7 @@ namespace uniBaterFrenteLoja
             string subTotalP2 = subTotal.Substring(12,2);
             subTotal = subTotalP1 + "," + subTotalP2;
             decimal subTotalDec = Convert.ToDecimal(subTotal);
-            txtTotal.Text = string.Format("{0:c}",subTotalDec);
+            txtTotal.Text =subTotalDec.ToString();
 
         }
 
@@ -971,20 +1042,27 @@ namespace uniBaterFrenteLoja
         {
             StringBuilder statusCupom = new StringBuilder(2);
             ECFSWEDA.ECF_StatusCupomFiscal(statusCupom);
-            if (statusCupom.ToString() == "1")
-            {
-                ECFSWEDA.ECF_CancelaCupom();
-                rtbCupom.Text = rtbCupom.Text + "============================================\n";
-                rtbCupom.Text = rtbCupom.Text + "              CUPOM CANCELADO               \n";
-                rtbCupom.Text = rtbCupom.Text + "============================================\n";
-                rtbCupom.Focus();
-                rtbCupom.Select(rtbCupom.Text.Length, 0);
+            ECFSWEDA.ECF_CancelaCupom();
 
+            MySqlParameter[] parCanCup = new MySqlParameter[1];
+            parCanCup[0] = new MySqlParameter("?codVenda",codVenda);
+            
+            comando = "select vendaFinalizada from ubvenda WHERE vendaCodigo = ?codVenda";
+            DataRow drCanCup =  objBanco.RetornaDataRow(conexao, CommandType.Text, comando, parCanCup);
+            if (drCanCup["vendaFinalizada"].ToString() == "0") {
+                MessageBox.Show("0");
             }
-            else
+            if (drCanCup["vendaFinalizada"].ToString() == "1")
             {
-                MessageBox.Show("Não há cupom a cancelar.");
+                MessageBox.Show("1");
             }
+            if (drCanCup["vendaFinalizada"].ToString() == "2")
+            {
+                MessageBox.Show("2");
+            }
+
+
+           
         }
 
         private void pictureBox7_Click(object sender, EventArgs e)
@@ -1058,7 +1136,9 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox10_Click(object sender, EventArgs e)
         {
-
+            frmCancItem frmCI = new frmCancItem();
+            frmCI.atualizarItensCancelar(codVenda);
+            frmCI.ShowDialog();
         }
 
         private void pictureBox11_Click(object sender, EventArgs e)
@@ -1072,6 +1152,8 @@ namespace uniBaterFrenteLoja
                     MySqlParameter[] par = new MySqlParameter[1];
                     par[0] = new MySqlParameter("?id", dr["id"]);
                     objBanco.ExecuteNonQuery(conexao, CommandType.Text, "UPDATE ubitem set cancelado = 1 where id = ?id", par);
+                    atualizarItensCancelar(codVenda);
+                
                 }
                 catch
                 {
@@ -1092,13 +1174,33 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox12_Click(object sender, EventArgs e)
         {
+            MySqlParameter[] parametros = new MySqlParameter[2];
+            parametros[0] = new MySqlParameter("?codVenda", codVenda);
+            parametros[1] = new MySqlParameter("?Item", itemSel);
 
+            string comando = "UPDATE ubitem SET cancelado = 1 where codVenda = ?codVenda and itemNumero = ?Item";
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parametros);
+
+            atualizarItensCancelar(codVenda);
+
+            ECFSWEDA.ECF_CancelaItemGenerico(itemSel);
         }
 
         private void pictureBox14_Click(object sender, EventArgs e)
         {
             compraSucata = false;
             dgvBateriasCompra.DataSource = null;
+        }
+
+        private void dgvItens_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                itemSel = dgvItens.SelectedRows[0].Cells[0].Value.ToString();
+            }
+            catch
+            {
+            }
         }
     }
 

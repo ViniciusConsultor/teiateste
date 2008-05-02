@@ -256,31 +256,21 @@ namespace uniBaterFrenteLoja
                 compraSucata = true;
             }
 
-            result = Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select id from ubitemsucata order by id desc").ItemArray[0]);
-            int codCompraItemSucata = ++result;
             int codProduto = cbTipoBateria.SelectedIndex;
             codProduto = ++codProduto;
             //item sucata
-            MySqlParameter[] parametrosItem = new MySqlParameter[7];
-            parametrosItem[0] = new MySqlParameter("?id", codCompraItemSucata);
-            parametrosItem[1] = new MySqlParameter("?itprod", codProduto);
-            parametrosItem[2] = new MySqlParameter("?itquant", numQtdCompra.Value);
-            parametrosItem[3] = new MySqlParameter("?itvalor", txtValorCompra.Text.Replace(",","."));
-            parametrosItem[4] = new MySqlParameter("?itsubtotal", txtSubTotalCompra.Text.Replace(",", "."));
-            parametrosItem[5] = new MySqlParameter("?itvencomsucata", codCompraBateria);
-            parametrosItem[6] = new MySqlParameter("?baseTroca", cbTroca.SelectedIndex.ToString());
+            MySqlParameter[] parametrosItem = new MySqlParameter[5];
+            parametrosItem[0] = new MySqlParameter("?itprod", codProduto);
+            parametrosItem[1] = new MySqlParameter("?itquant", numQtdCompra.Value);
+            parametrosItem[2] = new MySqlParameter("?itvalor", txtValorCompra.Text.Replace(",","."));
+            parametrosItem[3] = new MySqlParameter("?itvencomsucata", codCompraBateria);
+            parametrosItem[4] = new MySqlParameter("?baseTroca", cbTroca.SelectedIndex.ToString());
 
 
-            comando = "INSERT INTO ubitemsucata SET id=?id, itprod=?itprod, itquant=?itquant, itvalor=?itvalor, itsubtotal=?itsubtotal, itvencomsucata=?itvencomsucata,baseTroca = ?baseTroca";
+            comando = "INSERT INTO ubitemsucata SET itprod=?itprod, itquant=?itquant, itvalor=?itvalor, itvencomsucata=?itvencomsucata, baseTroca = ?baseTroca";
             objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parametrosItem);
 
-            MySqlParameter[] parametrosDGV= new MySqlParameter[1];
-            parametrosDGV[0] = new MySqlParameter("?venda", codCompraBateria);
-
-            comando = "SELECT ubitemsucata.id 'ID',itvencomsucata 'CODIGO',suprod 'PRODUTO',itquant 'QUANTIDADE', itvalor 'VALOR',itsubtotal 'SUBTOTAL'  FROM ubitemsucata,ubsucataprod WHERE itvencomsucata = ?venda and ubitemsucata.itprod = ubsucataprod.id order by ubitemsucata.id desc  ";
-            DataTable tabelaSucata = new DataTable();
-            tabelaSucata = objBanco.RetornaDataTable(conexao, CommandType.Text, comando, parametrosDGV);
-            dgvBateriasCompra.DataSource = tabelaSucata;
+            atualizarSucata();
 
 
             MySqlParameter[] parEstoq = new MySqlParameter[2];
@@ -308,6 +298,21 @@ namespace uniBaterFrenteLoja
 
 
         
+        }
+
+        private void atualizarSucata ()
+        {
+            MySqlParameter[] parametrosDGV= new MySqlParameter[1];
+            parametrosDGV[0] = new MySqlParameter("?venda", codCompraBateria);
+
+            comando = "SELECT  ubitemsucata.id 'ITEM',itvencomsucata 'COMPRA',suprod 'PRODUTO',itprod 'COD. PROD.',itquant 'QUANTIDADE', itvalor 'VALOR',itvalor * itquant  SUBTOTAL  FROM ubitemsucata,ubsucataprod WHERE itvencomsucata = ?venda and ubitemsucata.itprod = ubsucataprod.id order by ubitemsucata.id desc  ";
+            DataTable tabelaSucata = new DataTable();
+            tabelaSucata = objBanco.RetornaDataTable(conexao, CommandType.Text, comando, parametrosDGV);
+            dgvBateriasCompra.DataSource = tabelaSucata;
+
+            comando = "select sum(itquant * itvalor) SUBTOTAL from ubitemsucata where itvencomsucata = ?venda";
+            string SubTotalCompraSucata = objBanco.RetornaDataRow(conexao, CommandType.Text, comando, parametrosDGV)[0].ToString();
+            txtSubTotalCompraSucata.Text = SubTotalCompraSucata;
         }
 
         private void txtValorCompra_KeyPress(object sender, KeyPressEventArgs e)
@@ -1201,6 +1206,36 @@ namespace uniBaterFrenteLoja
             catch
             {
             }
+        }
+
+        private void pictureBox12_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                string idItemSucata = dgvBateriasCompra.SelectedRows[0].Cells[0].Value.ToString();
+                string idProdSucata = dgvBateriasCompra.SelectedRows[0].Cells[3].Value.ToString();
+
+                excluirItem(idItemSucata, idProdSucata);
+            }
+            catch { }
+        }
+
+        private void excluirItem(string itemSucata, string codProdSucata)
+        {
+            MySqlParameter[] parametros = new MySqlParameter[1];
+            parametros[0] = new MySqlParameter("?id", itemSucata);
+
+            string comando = "delete from ubitemsucata where id  = ?id";
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parametros);
+
+            MySqlParameter[] parametrosEst = new MySqlParameter[2];
+            parametrosEst[0] = new MySqlParameter("?produto",codProdSucata);
+            parametrosEst[1] = new MySqlParameter("?loja",login.idLoja);
+
+            comando = "update ubestoq_sucata set esquantsu = esquantsu - 1  where esprodsu = ?produto and esljsu = ?loja";
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parametrosEst);
+
+            atualizarSucata();
         }
     }
 

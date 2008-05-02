@@ -40,10 +40,10 @@ namespace uniBaterFrenteLoja
             this.aRQUIVOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sAIRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.lblCoo = new System.Windows.Forms.ToolStripStatusLabel();
             this.stOperador = new System.Windows.Forms.ToolStripStatusLabel();
             this.stLoja = new System.Windows.Forms.ToolStripStatusLabel();
             this.bsHorario = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblCoo = new System.Windows.Forms.ToolStripStatusLabel();
             this.stCodVenda = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsCodigoCompra = new System.Windows.Forms.ToolStripStatusLabel();
             this.numQtd = new System.Windows.Forms.NumericUpDown();
@@ -68,6 +68,8 @@ namespace uniBaterFrenteLoja
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.pictureBox11 = new System.Windows.Forms.PictureBox();
+            this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.txtAliquota = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -102,8 +104,6 @@ namespace uniBaterFrenteLoja
             this.pictureBox14 = new System.Windows.Forms.PictureBox();
             this.pictureBox17 = new System.Windows.Forms.PictureBox();
             this.pictureBox12 = new System.Windows.Forms.PictureBox();
-            this.pictureBox11 = new System.Windows.Forms.PictureBox();
-            this.pictureBox9 = new System.Windows.Forms.PictureBox();
             this.pictureBox8 = new System.Windows.Forms.PictureBox();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
@@ -114,9 +114,14 @@ namespace uniBaterFrenteLoja
             this.pictureBox13 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.txtSubTotalCompraSucata = new System.Windows.Forms.TextBox();
+            this.pictureBox10 = new System.Windows.Forms.PictureBox();
+            this.label25 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numQtd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBateriasCompra)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numQtdCompra)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItens)).BeginInit();
@@ -124,8 +129,6 @@ namespace uniBaterFrenteLoja
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox17)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
@@ -136,6 +139,7 @@ namespace uniBaterFrenteLoja
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -182,17 +186,6 @@ namespace uniBaterFrenteLoja
             this.statusStrip1.TabStop = true;
             this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
             // 
-            // lblCoo
-            // 
-            this.lblCoo.BackColor = System.Drawing.Color.Transparent;
-            this.lblCoo.BorderStyle = System.Windows.Forms.Border3DStyle.RaisedOuter;
-            this.lblCoo.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
-            this.lblCoo.ForeColor = System.Drawing.Color.Black;
-            this.lblCoo.Margin = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.lblCoo.Name = "lblCoo";
-            this.lblCoo.Size = new System.Drawing.Size(36, 22);
-            this.lblCoo.Text = "COO: ";
-            // 
             // stOperador
             // 
             this.stOperador.BackColor = System.Drawing.Color.Transparent;
@@ -228,6 +221,17 @@ namespace uniBaterFrenteLoja
             this.bsHorario.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.bsHorario.Click += new System.EventHandler(this.toolStripStatusLabel1_Click);
             // 
+            // lblCoo
+            // 
+            this.lblCoo.BackColor = System.Drawing.Color.Transparent;
+            this.lblCoo.BorderStyle = System.Windows.Forms.Border3DStyle.RaisedOuter;
+            this.lblCoo.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Bold);
+            this.lblCoo.ForeColor = System.Drawing.Color.Black;
+            this.lblCoo.Margin = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.lblCoo.Name = "lblCoo";
+            this.lblCoo.Size = new System.Drawing.Size(36, 22);
+            this.lblCoo.Text = "COO: ";
+            // 
             // stCodVenda
             // 
             this.stCodVenda.BackColor = System.Drawing.Color.Transparent;
@@ -249,8 +253,9 @@ namespace uniBaterFrenteLoja
             // 
             // numQtd
             // 
+            this.numQtd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.numQtd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numQtd.Location = new System.Drawing.Point(14, 352);
+            this.numQtd.Location = new System.Drawing.Point(131, 349);
             this.numQtd.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -274,9 +279,10 @@ namespace uniBaterFrenteLoja
             // 
             // txtValor
             // 
+            this.txtValor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtValor.Font = new System.Drawing.Font("Arial", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtValor.ForeColor = System.Drawing.Color.Black;
-            this.txtValor.Location = new System.Drawing.Point(147, 352);
+            this.txtValor.Location = new System.Drawing.Point(264, 349);
             this.txtValor.Margin = new System.Windows.Forms.Padding(4);
             this.txtValor.Name = "txtValor";
             this.txtValor.Size = new System.Drawing.Size(122, 30);
@@ -443,11 +449,12 @@ namespace uniBaterFrenteLoja
             // 
             // label15
             // 
+            this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
             this.label15.BackColor = System.Drawing.Color.Red;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(14, 335);
+            this.label15.Location = new System.Drawing.Point(131, 332);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(45, 13);
             this.label15.TabIndex = 49;
@@ -455,11 +462,12 @@ namespace uniBaterFrenteLoja
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Red;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(147, 335);
+            this.label1.Location = new System.Drawing.Point(264, 332);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 13);
             this.label1.TabIndex = 49;
@@ -467,13 +475,12 @@ namespace uniBaterFrenteLoja
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Red;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(326, 335);
+            this.label2.Location = new System.Drawing.Point(443, 332);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(96, 13);
             this.label2.TabIndex = 49;
@@ -481,10 +488,11 @@ namespace uniBaterFrenteLoja
             // 
             // txtSubTotal
             // 
+            this.txtSubTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSubTotal.BackColor = System.Drawing.Color.White;
             this.txtSubTotal.Font = new System.Drawing.Font("Arial", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSubTotal.ForeColor = System.Drawing.Color.Red;
-            this.txtSubTotal.Location = new System.Drawing.Point(326, 352);
+            this.txtSubTotal.Location = new System.Drawing.Point(443, 349);
             this.txtSubTotal.Margin = new System.Windows.Forms.Padding(4);
             this.txtSubTotal.Name = "txtSubTotal";
             this.txtSubTotal.ReadOnly = true;
@@ -525,6 +533,34 @@ namespace uniBaterFrenteLoja
             this.toolTip1.BackColor = System.Drawing.Color.White;
             this.toolTip1.IsBalloon = true;
             this.toolTip1.OwnerDraw = true;
+            // 
+            // pictureBox11
+            // 
+            this.pictureBox11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox11.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox11.Image = global::uniBaterFrenteLoja.Properties.Resources.btnCanA;
+            this.pictureBox11.Location = new System.Drawing.Point(952, 114);
+            this.pictureBox11.Name = "pictureBox11";
+            this.pictureBox11.Size = new System.Drawing.Size(28, 28);
+            this.pictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox11.TabIndex = 218;
+            this.pictureBox11.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBox11, "Cancelar Item Anterior");
+            this.pictureBox11.Click += new System.EventHandler(this.pictureBox11_Click);
+            // 
+            // pictureBox9
+            // 
+            this.pictureBox9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox9.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox9.Image = global::uniBaterFrenteLoja.Properties.Resources.btnCan;
+            this.pictureBox9.Location = new System.Drawing.Point(620, 209);
+            this.pictureBox9.Name = "pictureBox9";
+            this.pictureBox9.Size = new System.Drawing.Size(28, 28);
+            this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox9.TabIndex = 216;
+            this.pictureBox9.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBox9, "Cancelar Cupom");
+            this.pictureBox9.Click += new System.EventHandler(this.pictureBox9_Click);
             // 
             // txtAliquota
             // 
@@ -603,11 +639,12 @@ namespace uniBaterFrenteLoja
             // 
             // label17
             // 
+            this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label17.AutoSize = true;
             this.label17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.ForeColor = System.Drawing.Color.White;
-            this.label17.Location = new System.Drawing.Point(14, 195);
+            this.label17.Location = new System.Drawing.Point(185, 198);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(117, 13);
             this.label17.TabIndex = 2;
@@ -615,9 +652,10 @@ namespace uniBaterFrenteLoja
             // 
             // cbTipoCliente
             // 
+            this.cbTipoCliente.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbTipoCliente.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbTipoCliente.FormattingEnabled = true;
-            this.cbTipoCliente.Location = new System.Drawing.Point(14, 211);
+            this.cbTipoCliente.Location = new System.Drawing.Point(185, 214);
             this.cbTipoCliente.Name = "cbTipoCliente";
             this.cbTipoCliente.Size = new System.Drawing.Size(213, 23);
             this.cbTipoCliente.TabIndex = 5;
@@ -625,11 +663,12 @@ namespace uniBaterFrenteLoja
             // 
             // label18
             // 
+            this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label18.AutoSize = true;
             this.label18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.ForeColor = System.Drawing.Color.White;
-            this.label18.Location = new System.Drawing.Point(240, 195);
+            this.label18.Location = new System.Drawing.Point(411, 198);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(60, 13);
             this.label18.TabIndex = 2;
@@ -637,9 +676,10 @@ namespace uniBaterFrenteLoja
             // 
             // cbBloquear
             // 
+            this.cbBloquear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbBloquear.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbBloquear.FormattingEnabled = true;
-            this.cbBloquear.Location = new System.Drawing.Point(240, 211);
+            this.cbBloquear.Location = new System.Drawing.Point(411, 214);
             this.cbBloquear.Name = "cbBloquear";
             this.cbBloquear.Size = new System.Drawing.Size(168, 23);
             this.cbBloquear.TabIndex = 6;
@@ -674,8 +714,9 @@ namespace uniBaterFrenteLoja
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
             this.dgvBateriasCompra.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvBateriasCompra.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvBateriasCompra.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvBateriasCompra.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvBateriasCompra.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvBateriasCompra.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
@@ -713,7 +754,7 @@ namespace uniBaterFrenteLoja
             dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvBateriasCompra.RowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvBateriasCompra.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvBateriasCompra.Size = new System.Drawing.Size(636, 109);
+            this.dgvBateriasCompra.Size = new System.Drawing.Size(638, 64);
             this.dgvBateriasCompra.TabIndex = 207;
             this.dgvBateriasCompra.Click += new System.EventHandler(this.dgvBateriasCompra_Click);
             // 
@@ -869,11 +910,13 @@ namespace uniBaterFrenteLoja
             // 
             // txtSubTotalCompra
             // 
+            this.txtSubTotalCompra.BackColor = System.Drawing.Color.White;
             this.txtSubTotalCompra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSubTotalCompra.ForeColor = System.Drawing.Color.Black;
             this.txtSubTotalCompra.Location = new System.Drawing.Point(312, 412);
             this.txtSubTotalCompra.Margin = new System.Windows.Forms.Padding(4);
             this.txtSubTotalCompra.Name = "txtSubTotalCompra";
+            this.txtSubTotalCompra.ReadOnly = true;
             this.txtSubTotalCompra.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtSubTotalCompra.Size = new System.Drawing.Size(96, 23);
             this.txtSubTotalCompra.TabIndex = 16;
@@ -969,7 +1012,7 @@ namespace uniBaterFrenteLoja
             // 
             this.pictureBox15.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox15.Image = global::uniBaterFrenteLoja.Properties.Resources.btnCan;
-            this.pictureBox15.Location = new System.Drawing.Point(584, 407);
+            this.pictureBox15.Location = new System.Drawing.Point(586, 406);
             this.pictureBox15.Name = "pictureBox15";
             this.pictureBox15.Size = new System.Drawing.Size(28, 28);
             this.pictureBox15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -980,7 +1023,7 @@ namespace uniBaterFrenteLoja
             // 
             this.pictureBox14.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox14.Image = global::uniBaterFrenteLoja.Properties.Resources.btnNew;
-            this.pictureBox14.Location = new System.Drawing.Point(617, 407);
+            this.pictureBox14.Location = new System.Drawing.Point(620, 406);
             this.pictureBox14.Name = "pictureBox14";
             this.pictureBox14.Size = new System.Drawing.Size(28, 28);
             this.pictureBox14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -1005,46 +1048,19 @@ namespace uniBaterFrenteLoja
             // 
             this.pictureBox12.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox12.Image = global::uniBaterFrenteLoja.Properties.Resources.btnDel;
-            this.pictureBox12.Location = new System.Drawing.Point(551, 407);
+            this.pictureBox12.Location = new System.Drawing.Point(551, 406);
             this.pictureBox12.Name = "pictureBox12";
             this.pictureBox12.Size = new System.Drawing.Size(28, 28);
             this.pictureBox12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox12.TabIndex = 220;
             this.pictureBox12.TabStop = false;
-            this.pictureBox12.Click += new System.EventHandler(this.pictureBox12_Click);
-            // 
-            // pictureBox11
-            // 
-            this.pictureBox11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox11.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox11.Image = global::uniBaterFrenteLoja.Properties.Resources.btnCanA;
-            this.pictureBox11.Location = new System.Drawing.Point(952, 114);
-            this.pictureBox11.Name = "pictureBox11";
-            this.pictureBox11.Size = new System.Drawing.Size(28, 28);
-            this.pictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox11.TabIndex = 218;
-            this.pictureBox11.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBox11, "Cancelar Item Anterior");
-            this.pictureBox11.Click += new System.EventHandler(this.pictureBox11_Click);
-            // 
-            // pictureBox9
-            // 
-            this.pictureBox9.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox9.Image = global::uniBaterFrenteLoja.Properties.Resources.btnCan;
-            this.pictureBox9.Location = new System.Drawing.Point(448, 211);
-            this.pictureBox9.Name = "pictureBox9";
-            this.pictureBox9.Size = new System.Drawing.Size(28, 28);
-            this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox9.TabIndex = 216;
-            this.pictureBox9.TabStop = false;
-            this.toolTip1.SetToolTip(this.pictureBox9, "Cancelar Cupom");
-            this.pictureBox9.Click += new System.EventHandler(this.pictureBox9_Click);
+            this.pictureBox12.Click += new System.EventHandler(this.pictureBox12_Click_1);
             // 
             // pictureBox8
             // 
             this.pictureBox8.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
-            this.pictureBox8.Location = new System.Drawing.Point(518, 407);
+            this.pictureBox8.Location = new System.Drawing.Point(516, 406);
             this.pictureBox8.Name = "pictureBox8";
             this.pictureBox8.Size = new System.Drawing.Size(28, 28);
             this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -1066,8 +1082,9 @@ namespace uniBaterFrenteLoja
             // 
             // pictureBox6
             // 
+            this.pictureBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox6.Image = global::uniBaterFrenteLoja.Properties.Resources.btnAdd;
-            this.pictureBox6.Location = new System.Drawing.Point(503, 352);
+            this.pictureBox6.Location = new System.Drawing.Point(622, 351);
             this.pictureBox6.Name = "pictureBox6";
             this.pictureBox6.Size = new System.Drawing.Size(28, 28);
             this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -1077,9 +1094,10 @@ namespace uniBaterFrenteLoja
             // 
             // pictureBox5
             // 
+            this.pictureBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox5.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox5.Image = global::uniBaterFrenteLoja.Properties.Resources.btnNew;
-            this.pictureBox5.Location = new System.Drawing.Point(414, 211);
+            this.pictureBox5.Location = new System.Drawing.Point(586, 209);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(28, 28);
             this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -1111,8 +1129,9 @@ namespace uniBaterFrenteLoja
             // 
             // pictureBox16
             // 
+            this.pictureBox16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox16.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox16.Image")));
-            this.pictureBox16.Location = new System.Drawing.Point(284, 352);
+            this.pictureBox16.Location = new System.Drawing.Point(401, 353);
             this.pictureBox16.Name = "pictureBox16";
             this.pictureBox16.Size = new System.Drawing.Size(27, 26);
             this.pictureBox16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -1121,8 +1140,9 @@ namespace uniBaterFrenteLoja
             // 
             // pictureBox13
             // 
+            this.pictureBox13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox13.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox13.Image")));
-            this.pictureBox13.Location = new System.Drawing.Point(106, 352);
+            this.pictureBox13.Location = new System.Drawing.Point(223, 353);
             this.pictureBox13.Name = "pictureBox13";
             this.pictureBox13.Size = new System.Drawing.Size(27, 26);
             this.pictureBox13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -1150,12 +1170,47 @@ namespace uniBaterFrenteLoja
             this.pictureBox2.TabIndex = 5;
             this.pictureBox2.TabStop = false;
             // 
+            // txtSubTotalCompraSucata
+            // 
+            this.txtSubTotalCompraSucata.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSubTotalCompraSucata.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSubTotalCompraSucata.Location = new System.Drawing.Point(415, 534);
+            this.txtSubTotalCompraSucata.Name = "txtSubTotalCompraSucata";
+            this.txtSubTotalCompraSucata.Size = new System.Drawing.Size(197, 26);
+            this.txtSubTotalCompraSucata.TabIndex = 223;
+            // 
+            // pictureBox10
+            // 
+            this.pictureBox10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox10.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox10.Image")));
+            this.pictureBox10.Location = new System.Drawing.Point(620, 532);
+            this.pictureBox10.Name = "pictureBox10";
+            this.pictureBox10.Size = new System.Drawing.Size(28, 28);
+            this.pictureBox10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox10.TabIndex = 224;
+            this.pictureBox10.TabStop = false;
+            // 
+            // label25
+            // 
+            this.label25.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label25.AutoSize = true;
+            this.label25.BackColor = System.Drawing.Color.Red;
+            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.ForeColor = System.Drawing.Color.White;
+            this.label25.Location = new System.Drawing.Point(415, 515);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(124, 13);
+            this.label25.TabIndex = 49;
+            this.label25.Text = "TOTAL SUCATA R$:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(1026, 714);
+            this.Controls.Add(this.pictureBox10);
+            this.Controls.Add(this.txtSubTotalCompraSucata);
             this.Controls.Add(this.dgvItens);
             this.Controls.Add(this.pictureBox15);
             this.Controls.Add(this.pictureBox14);
@@ -1202,6 +1257,7 @@ namespace uniBaterFrenteLoja
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label19);
+            this.Controls.Add(this.label25);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtCodBarras);
             this.Controls.Add(this.label16);
@@ -1242,6 +1298,8 @@ namespace uniBaterFrenteLoja
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numQtd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBateriasCompra)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numQtdCompra)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvItens)).EndInit();
@@ -1249,8 +1307,6 @@ namespace uniBaterFrenteLoja
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox14)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox17)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox12)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
@@ -1261,6 +1317,7 @@ namespace uniBaterFrenteLoja
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox13)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1346,6 +1403,9 @@ namespace uniBaterFrenteLoja
         private System.Windows.Forms.ToolStripStatusLabel tsCodigoCompra;
         private System.Windows.Forms.DataGridView dgvItens;
         private System.Windows.Forms.PictureBox pictureBox17;
+        private System.Windows.Forms.TextBox txtSubTotalCompraSucata;
+        private System.Windows.Forms.PictureBox pictureBox10;
+        private System.Windows.Forms.Label label25;
 
     }
 }

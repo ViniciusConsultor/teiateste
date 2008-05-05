@@ -18,8 +18,9 @@ using System.Text;
           
     [DllImport("Convecf.dll")]
        public static extern int ECF_NumeroCaixa(StringBuilder caixa);
-       
 
+       [DllImport("CONVECF.DLL")]
+       public static extern int ECF_AcrescimoDescontoSubtotalMFD(string Flag, string Tipo, string Valor); 
 
         #region Funções de Inicialização
         //**********************************************************//		

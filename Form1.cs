@@ -46,7 +46,6 @@ namespace uniBaterFrenteLoja
             int abrePorta = ECFSWEDA.ECF_AbrePortaSerial();
             if (abrePorta == 1) {
                 ECFSWEDA.ECF_ZAUTO("1");
-                MessageBox.Show("Porta Aberta!");
             }
 
             ECFSWEDA.ECF_NumeroCaixa(caixa);
@@ -664,7 +663,7 @@ namespace uniBaterFrenteLoja
                 status = ECFSWEDA.ECF_StatusCupomFiscal(statusCupom);
                 if (statusCupom.ToString() != "0")
                 {
-                    MessageBox.Show("Existe cupom aberto atualmente!");
+                    txtDicas.Text = "Existe cupom aberto atualmente!";
                     return;
                 }
             }
@@ -769,11 +768,11 @@ namespace uniBaterFrenteLoja
                 }
                 catch
                 {
-                    MessageBox.Show("Houve um erro tente novamente!");
+                    txtDicas.Text = "Houve um erro tente novamente!";
                 }
             }
             else {
-                MessageBox.Show("Preencha os dados do cliente corretamente!");
+               txtDicas.Text = "Preencha os dados do cliente corretamente!";
             }
         }
 
@@ -915,7 +914,7 @@ namespace uniBaterFrenteLoja
            if (status != 1 ) 
            {
                ECFSWEDA.ECF_RetornoImpressoraMFD(ref ack, ref st1, ref st2, ref  st3);
-               MessageBox.Show("ERRO: " + st3.ToString());
+               txtDicas.Text = "ERRO: " + st3.ToString();
 
           }
            else
@@ -1054,16 +1053,49 @@ namespace uniBaterFrenteLoja
             
             comando = "select vendaFinalizada from ubvenda WHERE vendaCodigo = ?codVenda";
             DataRow drCanCup =  objBanco.RetornaDataRow(conexao, CommandType.Text, comando, parCanCup);
-            if (drCanCup["vendaFinalizada"].ToString() == "0") {
-                MessageBox.Show("0");
+          
+            if (drCanCup["vendaFinalizada"].ToString() == "0") 
+            {
+                comando = "UPDATE ubvenda SET vendaFinalizada = 2 where vendaCodigo = ?codVenda";
+                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
+                comando = "UPDATE ubitem SET cancelado = 1 where codVenda = ?codVenda";
+                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
+                dgvItens.DataSource = null;
+                txtDicas.Text = "Venda atual cancelada!";
+
             }
+
+
             if (drCanCup["vendaFinalizada"].ToString() == "1")
             {
-                MessageBox.Show("1");
+                comando = "UPDATE ubvenda SET vendaFinalizada = 2 where vendaCodigo = ?codVenda";
+                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
+                comando = "UPDATE ubitem SET cancelado = 1 where codVenda = ?codVenda";
+                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
+
+                DataTable dt = objBanco.RetornaDataTable(conexao, CommandType.Text, "SELECT itemCodigo,sum(itemQuantidade) from ubitem where codvenda = ?codVenda GROUP by itemCodigo", parCanCup);
+                int numeroLinhas = dt.Rows.Count;
+                DataRow dr;
+
+                MySqlParameter[] parametros = new MySqlParameter[3];
+
+                for (int i = 0; i < numeroLinhas; i++)
+                {
+                    dr = dt.Rows[i];
+                    parametros[0] = new MySqlParameter("?cod_prod", dr[0].ToString());
+                    parametros[1] = new MySqlParameter("?qtd", dr[1].ToString());
+                    parametros[2] = new MySqlParameter("?cod_lj", login.idLoja);
+                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, "update ubestoq_lj set prodquant = prodquant + ?qtd where cod_lj = ?cod_lj and cod_prod = ?cod_prod", parametros);
+                }
+
+                dgvItens.DataSource = null;
+                txtDicas.Text = "Venda anterior cancelada!";
+
+
             }
             if (drCanCup["vendaFinalizada"].ToString() == "2")
             {
-                MessageBox.Show("2");
+               txtDicas.Text = "Venda atual já se encontra cancelada!";
             }
 
 
@@ -1085,8 +1117,6 @@ namespace uniBaterFrenteLoja
             ECFSWEDA.ECF_EfetuaFormaPagamento(cbFormaPagamento.SelectedValue.ToString(), txtValorPago.Text);
             status = ECFSWEDA.ECF_TerminaFechamentoCupom("Volte Sempre!");
 
-            MessageBox.Show(status.ToString());
-
             StringBuilder valorPago = new StringBuilder(14);
             ECFSWEDA.ECF_ValorPagoUltimoCupom(valorPago);
             string valorPagoA = valorPago.ToString();
@@ -1104,6 +1134,8 @@ namespace uniBaterFrenteLoja
             subTotalA = subTotalA.Insert(12,",");
             decimal subTotalD = Convert.ToDecimal(subTotalA);
 
+
+            
             if (valorPagoD < subTotalD)
             {
                 decimal valorFaltante = subTotalD - valorPagoD;
@@ -1111,28 +1143,41 @@ namespace uniBaterFrenteLoja
             }
             else 
             {
-                if (valorPagoD > subTotalD)
-                { 
-                decimal troco = valorPagoD - subTotalD;
-                txtTroco.Text = troco.ToString();
-                }
-                txtDicas.Text = "Obrigado! Volte Sempre!";
-                MySqlParameter[] param = new MySqlParameter[1];
-                param[0] = new MySqlParameter("?vendaCodigo", codVenda);
-                objBanco.ExecuteNonQuery(conexao, CommandType.Text, "UPDATE ubvenda set vendaFinalizada = 1 where vendaCodigo=?vendaCodigo", param);
-                DataTable dt = objBanco.RetornaDataTable(conexao, CommandType.Text, "SELECT itemCodigo,sum(itemQuantidade) from ubitem where codvenda = ?vendaCodigo and cancelado <> 1 GROUP by itemCodigo", param);
-                int numeroLinhas = dt.Rows.Count;
-                DataRow dr;
 
-                MySqlParameter[] parametros = new MySqlParameter[3];
 
-                for (int i = 0; i < numeroLinhas; i++)
+                if (subTotalD == 0)
                 {
-                    dr = dt.Rows[i];
-                    parametros[0] = new MySqlParameter("?cod_prod", dr[0].ToString());
-                    parametros[1] = new MySqlParameter("?qtd", dr[1].ToString());
-                    parametros[2] = new MySqlParameter("?cod_lj", login.idLoja);
-                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, "update ubestoq_lj set prodquant = prodquant - ?qtd where cod_lj = ?cod_lj and cod_prod = ?cod_prod", parametros);
+                    txtDicas.Text = "Obrigado! Volte Sempre!";
+                    MySqlParameter[] param = new MySqlParameter[1];
+                    param[0] = new MySqlParameter("?vendaCodigo", codVenda);
+                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, "UPDATE ubvenda set vendaFinalizada = 2 where vendaCodigo=?vendaCodigo", param);
+                }
+                else
+                {
+
+                    if (valorPagoD > subTotalD)
+                    {
+                        decimal troco = valorPagoD - subTotalD;
+                        txtTroco.Text = troco.ToString();
+                    }
+                    txtDicas.Text = "Obrigado! Volte Sempre!";
+                    MySqlParameter[] param = new MySqlParameter[1];
+                    param[0] = new MySqlParameter("?vendaCodigo", codVenda);
+                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, "UPDATE ubvenda set vendaFinalizada = 1 where vendaCodigo=?vendaCodigo", param);
+                    DataTable dt = objBanco.RetornaDataTable(conexao, CommandType.Text, "SELECT itemCodigo,sum(itemQuantidade) from ubitem where codvenda = ?vendaCodigo and cancelado <> 1 GROUP by itemCodigo", param);
+                    int numeroLinhas = dt.Rows.Count;
+                    DataRow dr;
+
+                    MySqlParameter[] parametros = new MySqlParameter[3];
+
+                    for (int i = 0; i < numeroLinhas; i++)
+                    {
+                        dr = dt.Rows[i];
+                        parametros[0] = new MySqlParameter("?cod_prod", dr[0].ToString());
+                        parametros[1] = new MySqlParameter("?qtd", dr[1].ToString());
+                        parametros[2] = new MySqlParameter("?cod_lj", login.idLoja);
+                        objBanco.ExecuteNonQuery(conexao, CommandType.Text, "update ubestoq_lj set prodquant = prodquant - ?qtd where cod_lj = ?cod_lj and cod_prod = ?cod_prod", parametros);
+                    }
                 }
 
             }
@@ -1236,6 +1281,13 @@ namespace uniBaterFrenteLoja
             objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parametrosEst);
 
             atualizarSucata();
+        }
+
+        private void pictureBox10_Click_1(object sender, EventArgs e)
+        {
+            ECFSWEDA.ECF_AcrescimoDescontoSubtotalMFD("D", "$", txtSubTotalCompraSucata.Text);
+            subTotal();
+
         }
     }
 

@@ -148,11 +148,14 @@
   <data name="btnOrcamento" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btnOrcamento.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="btnCupomFiscal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\img\btnCupomFiscal.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="btnEstoque" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnEstoque.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="byteiapp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\img\byteiapp.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="btnCheque" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnCheque.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="btnCanA" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnCanA.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="btnIserir" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btnIserir.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -169,6 +172,12 @@
   <data name="btnCan" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btnCan.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="btnCupomFiscal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnCupomFiscal.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="byteiapp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\byteiapp.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="btnFechaCupom" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btnFechaCupom.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -184,7 +193,7 @@
   <data name="btnNew" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\img\btnNew.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="btnCanA" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\img\btnCanA.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="btnAtualizar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\img\btnAtualizar.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

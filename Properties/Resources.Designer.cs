@@ -95,6 +95,13 @@ namespace uniBaterFrenteLoja.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap btnAtualizar {
+            get {
+                object obj = ResourceManager.GetObject("btnAtualizar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap btnCan {
             get {
                 object obj = ResourceManager.GetObject("btnCan", resourceCulture);
@@ -123,6 +130,13 @@ namespace uniBaterFrenteLoja.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap btnCheque {
+            get {
+                object obj = ResourceManager.GetObject("btnCheque", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap btnCupomFiscal {
             get {
                 object obj = ResourceManager.GetObject("btnCupomFiscal", resourceCulture);
@@ -133,6 +147,13 @@ namespace uniBaterFrenteLoja.Properties {
         internal static System.Drawing.Bitmap btnDel {
             get {
                 object obj = ResourceManager.GetObject("btnDel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap btnEstoque {
+            get {
+                object obj = ResourceManager.GetObject("btnEstoque", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

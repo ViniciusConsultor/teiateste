@@ -235,8 +235,15 @@ namespace uniBaterFrenteLoja
 
             if (compraSucata == false)
             {
-                result = Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select id from ubvencomsucata order by id desc").ItemArray[0]);
-                codCompraBateria = ++result;
+                try
+                {
+                    result = Convert.ToInt32(objBanco.RetornaDataRow(conexao, CommandType.Text, "select id from ubvencomsucata order by id desc").ItemArray[0]);
+                    codCompraBateria = ++result;
+                }
+                catch
+                {
+                    codCompraBateria = 1;
+                }
 
                 tsCodigoCompra.Text = "CÓDIGO DA COMPRA: " + codCompraBateria;
 
@@ -1186,7 +1193,7 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox10_Click(object sender, EventArgs e)
         {
-            frmCancItem frmCI = new frmCancItem();
+            frmCadastroCheques frmCI = new frmCadastroCheques();
             frmCI.atualizarItensCancelar(codVenda);
             frmCI.ShowDialog();
         }
@@ -1289,6 +1296,47 @@ namespace uniBaterFrenteLoja
             subTotal();
 
         }
+
+        private void pictureBox15_Click(object sender, EventArgs e)
+        {
+            DataRow dr;
+ 
+            MySqlParameter[] parCanSuc = new MySqlParameter[1];
+            parCanSuc[0] = new MySqlParameter("?codSucata", codCompraBateria);
+
+
+            comando = "SELECT itprod,sum(itquant) from ubitemsucata where itvencomsucata = ?codSucata GROUP by itprod";
+            DataTable dt = objBanco.RetornaDataTable(conexao, CommandType.Text, comando, parCanSuc);
+            int numLinhasSuc = dt.Rows.Count;
+
+            MySqlParameter[] parCanSuc1 = new MySqlParameter[3];
+            for (int i = 0; i < numLinhasSuc; i++)
+            {
+              dr = dt.Rows[i];
+              parCanSuc1[0] = new MySqlParameter("?cod_prod", dr[0].ToString());
+              parCanSuc1[1] = new MySqlParameter("?qtd", dr[1].ToString());
+              parCanSuc1[2] = new MySqlParameter("?cod_lj", login.idLoja);
+              objBanco.ExecuteNonQuery(conexao, CommandType.Text, "update ubestoq_sucata set esquantsu = esquantsu - ?qtd where esljsu = ?cod_lj and esprodsu = ?cod_prod", parCanSuc1);
+            }
+
+            
+            parCanSuc[0] = new MySqlParameter("?codSucata",codCompraBateria);
+            comando = "DELETE FROM ubvencomsucata WHERE id = ?codSucata";
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanSuc);
+            comando = "DELETE FROM ubitemsucata WHERE itvencomsucata = ?codSucata";
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanSuc);
+
+            compraSucata = false;
+            dgvBateriasCompra.DataSource = null;
+
+        }
+
+        private void pictureBox19_Click(object sender, EventArgs e)
+        {
+            frmCadastroCheques frmCadCheque = new frmCadastroCheques("Teste");
+            frmCadCheque.ShowDialog();
+        }
+
     }
 
 }

@@ -39,7 +39,7 @@ namespace uniBaterFrenteLoja
             this.Width = 231;
             conexao objConexao = new conexao();
 
-            objConexao.preencheCB(cbLojas, "Select * from ubloja",frm1.conexao);
+            objConexao.preencheCB(cbLojas, "Select * from ubloja",Form1.conexao);
             txtUsuario.Focus();
         }
 
@@ -60,7 +60,7 @@ namespace uniBaterFrenteLoja
 
         public void efetuarLogin() {
 
-            MySqlConnection con = new MySqlConnection(frm1.conexao);
+            MySqlConnection con = new MySqlConnection(Form1.conexao);
             con.Open();
             MySqlCommand comando = new MySqlCommand("Select id,fcNomeAcesso,fcSenha,fcLoja from ubfuncionario where fcNomeAcesso =?Nome and fcSenha =?Senha and fcLoja=?Loja");
             comando.Connection = con;
@@ -111,6 +111,13 @@ namespace uniBaterFrenteLoja
         private void txtUsuario_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void pictureBox5_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            vendaOrcamento frmVenOrc = new vendaOrcamento();
+            frmVenOrc.Show();
         }
     }
 }

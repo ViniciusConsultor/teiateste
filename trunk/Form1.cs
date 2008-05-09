@@ -14,7 +14,7 @@ namespace uniBaterFrenteLoja
 {
     public partial class Form1 : Form
     {
-        public string conexao = "Server=colocation1.teiapp.com.br;Database=unibater;Uid=root;Pwd=bd@teia;";
+        static public string conexao = "Server=colocation1.teiapp.com.br;Database=unibater;Uid=root;Pwd=bd@teia;";
         public string lista;
         public string clienteEncontrado = "0";
         public string cupomAberto = "0";
@@ -57,7 +57,7 @@ namespace uniBaterFrenteLoja
                 parametros1[0] = new MySqlParameter("?caixa", caixa.ToString());
                 parametros1[1] = new MySqlParameter("?loja", login.idLoja);
 
-                string comandoT = "select vendaCodigo, vendaCoo,VendaCodCli from ubvenda where caixa = ?caixa and vendaLoja = ?loja and vendaFinalizada <> 1 and vendaFinalizada <> 2 and vendaCupom ='C' order by vendaCodigo desc limit 1";
+                string comandoT = "select vendaCodigo, vendaCoo,VendaCodCli from ubvenda where vendaCaixa = ?caixa and vendaLoja = ?loja and vendaFinalizada <> 1 and vendaFinalizada <> 2 and vendaCupom ='C' order by vendaCodigo desc limit 1";
                 DataRow drCupom =  objBanco.RetornaDataRow(conexao, CommandType.Text, comandoT, parametros1);
 
                 codVenda = Convert.ToInt32(drCupom["vendaCodigo"]);
@@ -673,7 +673,9 @@ namespace uniBaterFrenteLoja
                     txtDicas.Text = "Existe cupom aberto atualmente!";
                     return;
                 }
+
             }
+            
             
 
             //Gera numero da venda
@@ -685,23 +687,25 @@ namespace uniBaterFrenteLoja
 
             ECFSWEDA.ECF_NumeroCaixa(caixa);           
             
-            MySqlParameter[] par = new MySqlParameter[9];
+            MySqlParameter[] par = new MySqlParameter[10];
             par[0] = new MySqlParameter("?vendaCod",codVenda);
             par[1] = new MySqlParameter("?vendaData",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             par[2] = new MySqlParameter("?vendaLoja",Convert.ToInt32(login.idLoja));
             par[3] = new MySqlParameter("?vendaOperador",Convert.ToInt32(login.idUsuario));
             par[4] = new MySqlParameter("?vendaLista",lista.Replace(",","."));
-            par[5] = new MySqlParameter("?vendaCategoria", ++meioPag);
-            par[6] = new MySqlParameter("?vendaCodCli", txtCodigoCliente.Text);
-            par[7] = new MySqlParameter("?vendaCOO", coo.ToString());
-            par[8] = new MySqlParameter("?caixa", caixa.ToString());
+            par[5] = new MySqlParameter("?vendaCodCli", txtCodigoCliente.Text);
+            par[6] = new MySqlParameter("?vendaCOO", coo.ToString());
+            par[7] = new MySqlParameter("?caixa", caixa.ToString());
+            par[8] = new MySqlParameter("?veiculo", txtVeiculo.Text);
+            par[9] = new MySqlParameter("?placa", txtPlaca.Text);
+
             
 
             stCodVenda.Text = "CÓDIGO DA VENDA: " + codVenda.ToString();
             
             lblCoo.Text = "COO: " + coo.ToString();
 
-            objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubvenda (vendaCodigo,vendaCoo,vendaCupom,vendaLoja,vendaCodCli,vendaData,vendaOperador,vendaCategoria,vendaLista,caixa) values(?vendaCod,?vendaCOO,'C',?vendaLoja,?vendaCodCli,?vendaData,?vendaOperador,?vendaCategoria,?vendaLista,?caixa)", par);
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubvenda SET vendaCodigo = ?vendaCod, vendaCoo = ?vendaCOO,vendaCupom = 'C', vendaLoja = ?vendaLoja,vendaCodCli = ?vendaCodCli,vendaData = ?vendaData, vendaOperador = ?vendaOperador,vendaLista = ?vendaLista,vendaCaixa = ?caixa,vendaVeiculo = ?veiculo,vendaPlaca = ?placa", par);
             
 
         }
@@ -903,7 +907,7 @@ namespace uniBaterFrenteLoja
                status = ECFSWEDA.ECF_UltimoItemVendido(numeroItem);
 
 
-               MySqlParameter[] par = new MySqlParameter[7];
+               MySqlParameter[] par = new MySqlParameter[8];
                par[0] = new MySqlParameter("?itemNumero", numeroItem.ToString());
                par[1] = new MySqlParameter("?itemCodigo",txtCodProduto.Text );
                par[2] = new MySqlParameter("?itemCodBarras", txtCodBarras.Text);
@@ -911,7 +915,9 @@ namespace uniBaterFrenteLoja
                par[4] = new MySqlParameter("?itemQuantidade",numQtd.Value);
                par[5] = new MySqlParameter("?itemValorBase",valorBase);
                par[6] = new MySqlParameter("?itemValorVenda",txtValor.Text.Replace(",","."));
-               objBanco.ExecuteNonQuery(conexao, CommandType.Text,"INSERT INTO ubitem SET itemNumero=?itemNumero,itemCodigo=?itemCodigo,itemCodBarras=?itemCodBarras,CodVenda=?CodVenda,itemQuantidade=?itemQuantidade,itemValorBase=?itemValorBase,itemValorVenda=?itemValorVenda;", par);
+               par[7] = new MySqlParameter("?nsBateria", txtNSBateria.Text);
+
+               objBanco.ExecuteNonQuery(conexao, CommandType.Text, "INSERT INTO ubitem SET itemNumero=?itemNumero,itemCodigo=?itemCodigo,itemCodBarras=?itemCodBarras,CodVenda=?CodVenda,itemQuantidade=?itemQuantidade,itemValorBase=?itemValorBase,itemValorVenda=?itemValorVenda,itemNsBateria = ?nsBateria", par);
 
                atualizarItensCancelar(codVenda);
             
@@ -1051,62 +1057,67 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox9_Click(object sender, EventArgs e)
         {
-            StringBuilder statusCupom = new StringBuilder(2);
-            ECFSWEDA.ECF_StatusCupomFiscal(statusCupom);
-            ECFSWEDA.ECF_CancelaCupom();
 
-            MySqlParameter[] parCanCup = new MySqlParameter[1];
-            parCanCup[0] = new MySqlParameter("?codVenda",codVenda);
-            
-            comando = "select vendaFinalizada from ubvenda WHERE vendaCodigo = ?codVenda";
-            DataRow drCanCup =  objBanco.RetornaDataRow(conexao, CommandType.Text, comando, parCanCup);
-          
-            if (drCanCup["vendaFinalizada"].ToString() == "0") 
+            try
             {
-                comando = "UPDATE ubvenda SET vendaFinalizada = 2 where vendaCodigo = ?codVenda";
-                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
-                comando = "UPDATE ubitem SET cancelado = 1 where codVenda = ?codVenda";
-                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
-                dgvItens.DataSource = null;
-                txtDicas.Text = "Venda atual cancelada!";
+                StringBuilder statusCupom = new StringBuilder(2);
+                ECFSWEDA.ECF_StatusCupomFiscal(statusCupom);
+                ECFSWEDA.ECF_CancelaCupom();
 
-            }
+                MySqlParameter[] parCanCup = new MySqlParameter[1];
+                parCanCup[0] = new MySqlParameter("?codVenda", codVenda);
 
+                comando = "select vendaFinalizada from ubvenda WHERE vendaCodigo = ?codVenda";
 
-            if (drCanCup["vendaFinalizada"].ToString() == "1")
-            {
-                comando = "UPDATE ubvenda SET vendaFinalizada = 2 where vendaCodigo = ?codVenda";
-                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
-                comando = "UPDATE ubitem SET cancelado = 1 where codVenda = ?codVenda";
-                objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
+                DataRow drCanCup = objBanco.RetornaDataRow(conexao, CommandType.Text, comando, parCanCup);
 
-                DataTable dt = objBanco.RetornaDataTable(conexao, CommandType.Text, "SELECT itemCodigo,sum(itemQuantidade) from ubitem where codvenda = ?codVenda GROUP by itemCodigo", parCanCup);
-                int numeroLinhas = dt.Rows.Count;
-                DataRow dr;
-
-                MySqlParameter[] parametros = new MySqlParameter[3];
-
-                for (int i = 0; i < numeroLinhas; i++)
+                if (drCanCup["vendaFinalizada"].ToString() == "0")
                 {
-                    dr = dt.Rows[i];
-                    parametros[0] = new MySqlParameter("?cod_prod", dr[0].ToString());
-                    parametros[1] = new MySqlParameter("?qtd", dr[1].ToString());
-                    parametros[2] = new MySqlParameter("?cod_lj", login.idLoja);
-                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, "update ubestoq_lj set prodquant = prodquant + ?qtd where cod_lj = ?cod_lj and cod_prod = ?cod_prod", parametros);
+                    comando = "UPDATE ubvenda SET vendaFinalizada = 2 where vendaCodigo = ?codVenda";
+                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
+                    comando = "UPDATE ubitem SET cancelado = 1 where codVenda = ?codVenda";
+                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
+                    dgvItens.DataSource = null;
+                    txtDicas.Text = "Venda atual cancelada!";
+
                 }
 
-                dgvItens.DataSource = null;
-                txtDicas.Text = "Venda anterior cancelada!";
+
+                if (drCanCup["vendaFinalizada"].ToString() == "1")
+                {
+                    comando = "UPDATE ubvenda SET vendaFinalizada = 2 where vendaCodigo = ?codVenda";
+                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
+                    comando = "UPDATE ubitem SET cancelado = 1 where codVenda = ?codVenda";
+                    objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parCanCup);
+
+                    DataTable dt = objBanco.RetornaDataTable(conexao, CommandType.Text, "SELECT itemCodigo,sum(itemQuantidade) from ubitem where codvenda = ?codVenda GROUP by itemCodigo", parCanCup);
+                    int numeroLinhas = dt.Rows.Count;
+                    DataRow dr;
+
+                    MySqlParameter[] parametros = new MySqlParameter[3];
+
+                    for (int i = 0; i < numeroLinhas; i++)
+                    {
+                        dr = dt.Rows[i];
+                        parametros[0] = new MySqlParameter("?cod_prod", dr[0].ToString());
+                        parametros[1] = new MySqlParameter("?qtd", dr[1].ToString());
+                        parametros[2] = new MySqlParameter("?cod_lj", login.idLoja);
+                        objBanco.ExecuteNonQuery(conexao, CommandType.Text, "update ubestoq_lj set prodquant = prodquant + ?qtd where cod_lj = ?cod_lj and cod_prod = ?cod_prod", parametros);
+                    }
+
+                    dgvItens.DataSource = null;
+                    txtDicas.Text = "Venda anterior cancelada!";
+
+
+                }
+                if (drCanCup["vendaFinalizada"].ToString() == "2")
+                {
+                    txtDicas.Text = "Venda atual já se encontra cancelada!";
+                }
 
 
             }
-            if (drCanCup["vendaFinalizada"].ToString() == "2")
-            {
-               txtDicas.Text = "Venda atual já se encontra cancelada!";
-            }
-
-
-           
+            catch { }
         }
 
         private void pictureBox7_Click(object sender, EventArgs e)
@@ -1117,11 +1128,22 @@ namespace uniBaterFrenteLoja
         public string tipo = "$";
         public string valor = "00000000000000";
 
+        private void pagamentoEfetuado(decimal valorPago,int formaPagamento, int venda)
+        {
+            MySqlParameter[] parPag = new MySqlParameter[3];
+            parPag[0] = new MySqlParameter("?valorPago", valorPago);
+            parPag[1] = new MySqlParameter("?formaPagamento", formaPagamento++);
+            parPag[2] = new MySqlParameter("?venda", venda);
+            comando = "INSERT INTO ubvendapagamento SET formaPagamento = ?formaPagamento, valorPago = ?valorPago, idVenda= ?venda";
+            objBanco.ExecuteNonQuery(conexao, CommandType.Text, comando, parPag);
+        }
+
         private void fechaCupom(){
             string meioPagamento = cbFormaPagamento.SelectedValue.ToString();
-            //ECFSWEDA.ECF_FechaCupom(meioPagamento, "A", "$", "0000", txtValorPago.Text, "A UNIBATER AGRADECE A PREFERÊNCIA - VOLTE SEMPRE");
             ECFSWEDA.ECF_IniciaFechamentoCupom("A", tipo, valor);
-            ECFSWEDA.ECF_EfetuaFormaPagamento(cbFormaPagamento.SelectedValue.ToString(), txtValorPago.Text);
+            decimal valorPagoU = Convert.ToDecimal(txtValorPago.Text);
+
+            ECFSWEDA.ECF_EfetuaFormaPagamento(cbFormaPagamento.SelectedValue.ToString(),  string.Format("{0:0.00}",valorPagoU));
             status = ECFSWEDA.ECF_TerminaFechamentoCupom("Volte Sempre!");
 
             StringBuilder valorPago = new StringBuilder(14);
@@ -1131,6 +1153,7 @@ namespace uniBaterFrenteLoja
             string valorPagoS = valorPagoA.Substring(12, 2);
             valorPagoA = valorPagoP + "," + valorPagoS;
             decimal valorPagoD = Convert.ToDecimal(valorPagoA);
+            
             txtValorPago.ResetText();
            
             StringBuilder subTotal = new StringBuilder(14);
@@ -1147,6 +1170,7 @@ namespace uniBaterFrenteLoja
             {
                 decimal valorFaltante = subTotalD - valorPagoD;
                 txtDicas.Text = "Faltam: R$" + valorFaltante.ToString();
+                pagamentoEfetuado(valorPagoU, cbFormaPagamento.SelectedIndex, codVenda);
             }
             else 
             {
@@ -1167,6 +1191,7 @@ namespace uniBaterFrenteLoja
                         decimal troco = valorPagoD - subTotalD;
                         txtTroco.Text = troco.ToString();
                     }
+                    pagamentoEfetuado(valorPagoU, cbFormaPagamento.SelectedIndex, codVenda);
                     txtDicas.Text = "Obrigado! Volte Sempre!";
                     MySqlParameter[] param = new MySqlParameter[1];
                     param[0] = new MySqlParameter("?vendaCodigo", codVenda);
@@ -1335,6 +1360,281 @@ namespace uniBaterFrenteLoja
         {
             frmCadastroCheques frmCadCheque = new frmCadastroCheques("Teste");
             frmCadCheque.ShowDialog();
+        }
+
+        private void label27_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label28_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNSBateria_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtSubTotalCompraSucata_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvItens_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void cbTroca_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtTelefone_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void txtValorPago_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvBateriasCompra_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void cbBloquear_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbTipoBateria_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbFormaPagamento_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label18_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label17_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label24_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtSubTotalCompra_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label22_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtValorCompra_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label21_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtValor_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label23_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label19_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label25_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label16_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label20_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label26_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label15_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtPlaca_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtVeiculo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtNomeCliente_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtDicas_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtTroco_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtTotal_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtCpfCnpj_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtCodigoCliente_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void pictureBox18_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox16_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

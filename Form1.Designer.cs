@@ -100,6 +100,12 @@ namespace uniBaterFrenteLoja
             this.dgvItens = new System.Windows.Forms.DataGridView();
             this.txtSubTotalCompraSucata = new System.Windows.Forms.TextBox();
             this.label25 = new System.Windows.Forms.Label();
+            this.txtNSBateria = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label28 = new System.Windows.Forms.Label();
+            this.txtVeiculo = new System.Windows.Forms.TextBox();
+            this.txtPlaca = new System.Windows.Forms.TextBox();
             this.pictureBox19 = new System.Windows.Forms.PictureBox();
             this.pictureBox18 = new System.Windows.Forms.PictureBox();
             this.pictureBox10 = new System.Windows.Forms.PictureBox();
@@ -157,6 +163,7 @@ namespace uniBaterFrenteLoja
             this.menuStrip1.Size = new System.Drawing.Size(1026, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // aRQUIVOToolStripMenuItem
             // 
@@ -293,6 +300,7 @@ namespace uniBaterFrenteLoja
             this.txtValor.TabIndex = 12;
             this.txtValor.Text = "0,00";
             this.txtValor.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtValor.TextChanged += new System.EventHandler(this.txtValor_TextChanged);
             this.txtValor.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtValor_KeyUp);
             this.txtValor.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtValor_KeyPress);
             // 
@@ -310,6 +318,7 @@ namespace uniBaterFrenteLoja
             this.txtTotal.Size = new System.Drawing.Size(360, 53);
             this.txtTotal.TabIndex = 20;
             this.txtTotal.Text = "0,00";
+            this.txtTotal.TextChanged += new System.EventHandler(this.txtTotal_TextChanged);
             // 
             // txtCpfCnpj
             // 
@@ -319,10 +328,11 @@ namespace uniBaterFrenteLoja
             this.txtCpfCnpj.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCpfCnpj.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCpfCnpj.ForeColor = System.Drawing.Color.Black;
-            this.txtCpfCnpj.Location = new System.Drawing.Point(190, 121);
+            this.txtCpfCnpj.Location = new System.Drawing.Point(87, 121);
             this.txtCpfCnpj.Name = "txtCpfCnpj";
-            this.txtCpfCnpj.Size = new System.Drawing.Size(458, 21);
+            this.txtCpfCnpj.Size = new System.Drawing.Size(283, 21);
             this.txtCpfCnpj.TabIndex = 2;
+            this.txtCpfCnpj.TextChanged += new System.EventHandler(this.txtCpfCnpj_TextChanged);
             this.txtCpfCnpj.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtCpfCnpj_KeyUp);
             // 
             // txtCodigoCliente
@@ -331,11 +341,12 @@ namespace uniBaterFrenteLoja
             this.txtCodigoCliente.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCodigoCliente.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCodigoCliente.ForeColor = System.Drawing.Color.Black;
-            this.txtCodigoCliente.Location = new System.Drawing.Point(14, 121);
+            this.txtCodigoCliente.Location = new System.Drawing.Point(10, 121);
             this.txtCodigoCliente.Name = "txtCodigoCliente";
-            this.txtCodigoCliente.Size = new System.Drawing.Size(165, 21);
+            this.txtCodigoCliente.Size = new System.Drawing.Size(70, 21);
             this.txtCodigoCliente.TabIndex = 1;
             this.toolTip1.SetToolTip(this.txtCodigoCliente, "Códido do Cliente");
+            this.txtCodigoCliente.TextChanged += new System.EventHandler(this.txtCodigoCliente_TextChanged_1);
             this.txtCodigoCliente.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtCodigoCliente_KeyPress);
             // 
             // label8
@@ -344,12 +355,13 @@ namespace uniBaterFrenteLoja
             this.label8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(190, 105);
+            this.label8.Location = new System.Drawing.Point(87, 105);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(71, 13);
             this.label8.TabIndex = 1;
             this.label8.Text = "CPF/CNPJ:";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // label7
             // 
@@ -363,6 +375,7 @@ namespace uniBaterFrenteLoja
             this.label7.Size = new System.Drawing.Size(75, 13);
             this.label7.TabIndex = 2;
             this.label7.Text = "TELEFONE:";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // timerHora
             // 
@@ -373,10 +386,11 @@ namespace uniBaterFrenteLoja
             this.txtNomeCliente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNomeCliente.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNomeCliente.Location = new System.Drawing.Point(14, 166);
+            this.txtNomeCliente.Location = new System.Drawing.Point(10, 166);
             this.txtNomeCliente.Name = "txtNomeCliente";
             this.txtNomeCliente.Size = new System.Drawing.Size(430, 21);
             this.txtNomeCliente.TabIndex = 3;
+            this.txtNomeCliente.TextChanged += new System.EventHandler(this.txtNomeCliente_TextChanged);
             // 
             // label12
             // 
@@ -384,7 +398,7 @@ namespace uniBaterFrenteLoja
             this.label12.BackColor = System.Drawing.Color.Red;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.Color.White;
-            this.label12.Location = new System.Drawing.Point(14, 245);
+            this.label12.Location = new System.Drawing.Point(11, 245);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(37, 13);
             this.label12.TabIndex = 49;
@@ -394,7 +408,7 @@ namespace uniBaterFrenteLoja
             // 
             this.txtCodProduto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCodProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCodProduto.Location = new System.Drawing.Point(14, 261);
+            this.txtCodProduto.Location = new System.Drawing.Point(10, 261);
             this.txtCodProduto.Name = "txtCodProduto";
             this.txtCodProduto.Size = new System.Drawing.Size(165, 23);
             this.txtCodProduto.TabIndex = 7;
@@ -412,6 +426,7 @@ namespace uniBaterFrenteLoja
             this.label13.Size = new System.Drawing.Size(95, 13);
             this.label13.TabIndex = 49;
             this.label13.Text = "CÓD. BARRAS:";
+            this.label13.Click += new System.EventHandler(this.label13_Click);
             // 
             // txtCodBarras
             // 
@@ -432,11 +447,12 @@ namespace uniBaterFrenteLoja
             this.label14.BackColor = System.Drawing.Color.Red;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(14, 289);
+            this.label14.Location = new System.Drawing.Point(11, 289);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(82, 13);
             this.label14.TabIndex = 49;
             this.label14.Text = "DESCRIÇÃO:";
+            this.label14.Click += new System.EventHandler(this.label14_Click);
             // 
             // txtDescProduto
             // 
@@ -444,7 +460,7 @@ namespace uniBaterFrenteLoja
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDescProduto.BackColor = System.Drawing.Color.White;
             this.txtDescProduto.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDescProduto.Location = new System.Drawing.Point(14, 306);
+            this.txtDescProduto.Location = new System.Drawing.Point(10, 306);
             this.txtDescProduto.Name = "txtDescProduto";
             this.txtDescProduto.ReadOnly = true;
             this.txtDescProduto.Size = new System.Drawing.Size(636, 23);
@@ -463,6 +479,7 @@ namespace uniBaterFrenteLoja
             this.label15.Size = new System.Drawing.Size(45, 13);
             this.label15.TabIndex = 49;
             this.label15.Text = "QTDE:";
+            this.label15.Click += new System.EventHandler(this.label15_Click);
             // 
             // label1
             // 
@@ -476,6 +493,7 @@ namespace uniBaterFrenteLoja
             this.label1.Size = new System.Drawing.Size(72, 13);
             this.label1.TabIndex = 49;
             this.label1.Text = "VALOR R$:";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -489,6 +507,7 @@ namespace uniBaterFrenteLoja
             this.label2.Size = new System.Drawing.Size(96, 13);
             this.label2.TabIndex = 49;
             this.label2.Text = "SUBTOTAL R$:";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // txtSubTotal
             // 
@@ -513,11 +532,12 @@ namespace uniBaterFrenteLoja
             this.label5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(14, 150);
+            this.label5.Location = new System.Drawing.Point(11, 150);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(47, 13);
             this.label5.TabIndex = 2;
             this.label5.Text = "NOME:";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // label4
             // 
@@ -525,7 +545,7 @@ namespace uniBaterFrenteLoja
             this.label4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(14, 105);
+            this.label4.Location = new System.Drawing.Point(11, 105);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(37, 13);
             this.label4.TabIndex = 49;
@@ -562,6 +582,7 @@ namespace uniBaterFrenteLoja
             this.label9.Size = new System.Drawing.Size(73, 13);
             this.label9.TabIndex = 49;
             this.label9.Text = "ALÍQUOTA:";
+            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // label10
             // 
@@ -575,6 +596,7 @@ namespace uniBaterFrenteLoja
             this.label10.Size = new System.Drawing.Size(71, 13);
             this.label10.TabIndex = 49;
             this.label10.Text = "TOTAL R$:";
+            this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // label11
             // 
@@ -589,6 +611,7 @@ namespace uniBaterFrenteLoja
             this.label11.Size = new System.Drawing.Size(48, 13);
             this.label11.TabIndex = 1;
             this.label11.Text = "ITENS:";
+            this.label11.Click += new System.EventHandler(this.label11_Click);
             // 
             // label16
             // 
@@ -597,21 +620,23 @@ namespace uniBaterFrenteLoja
             this.label16.BackColor = System.Drawing.Color.Red;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.White;
-            this.label16.Location = new System.Drawing.Point(13, 559);
+            this.label16.Location = new System.Drawing.Point(11, 559);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(156, 13);
             this.label16.TabIndex = 49;
             this.label16.Text = "FORMA DE PAGAMENTO:";
+            this.label16.Click += new System.EventHandler(this.label16_Click);
             // 
             // cbFormaPagamento
             // 
             this.cbFormaPagamento.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbFormaPagamento.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbFormaPagamento.FormattingEnabled = true;
-            this.cbFormaPagamento.Location = new System.Drawing.Point(13, 577);
+            this.cbFormaPagamento.Location = new System.Drawing.Point(10, 577);
             this.cbFormaPagamento.Name = "cbFormaPagamento";
             this.cbFormaPagamento.Size = new System.Drawing.Size(187, 28);
             this.cbFormaPagamento.TabIndex = 17;
+            this.cbFormaPagamento.SelectedIndexChanged += new System.EventHandler(this.cbFormaPagamento_SelectedIndexChanged);
             // 
             // label17
             // 
@@ -625,6 +650,7 @@ namespace uniBaterFrenteLoja
             this.label17.Size = new System.Drawing.Size(117, 13);
             this.label17.TabIndex = 2;
             this.label17.Text = "TIPO DE CLIENTE:";
+            this.label17.Click += new System.EventHandler(this.label17_Click);
             // 
             // cbTipoCliente
             // 
@@ -649,6 +675,7 @@ namespace uniBaterFrenteLoja
             this.label18.Size = new System.Drawing.Size(60, 13);
             this.label18.TabIndex = 2;
             this.label18.Text = "STATUS:";
+            this.label18.Click += new System.EventHandler(this.label18_Click);
             // 
             // cbBloquear
             // 
@@ -659,6 +686,7 @@ namespace uniBaterFrenteLoja
             this.cbBloquear.Name = "cbBloquear";
             this.cbBloquear.Size = new System.Drawing.Size(168, 23);
             this.cbBloquear.TabIndex = 6;
+            this.cbBloquear.SelectedIndexChanged += new System.EventHandler(this.cbBloquear_SelectedIndexChanged);
             // 
             // label19
             // 
@@ -671,14 +699,16 @@ namespace uniBaterFrenteLoja
             this.label19.Size = new System.Drawing.Size(118, 13);
             this.label19.TabIndex = 49;
             this.label19.Text = "TIPO DE BATERIA:";
+            this.label19.Click += new System.EventHandler(this.label19_Click);
             // 
             // cbTipoBateria
             // 
             this.cbTipoBateria.FormattingEnabled = true;
-            this.cbTipoBateria.Location = new System.Drawing.Point(11, 411);
+            this.cbTipoBateria.Location = new System.Drawing.Point(10, 411);
             this.cbTipoBateria.Name = "cbTipoBateria";
             this.cbTipoBateria.Size = new System.Drawing.Size(158, 24);
             this.cbTipoBateria.TabIndex = 14;
+            this.cbTipoBateria.SelectedIndexChanged += new System.EventHandler(this.cbTipoBateria_SelectedIndexChanged);
             // 
             // dgvBateriasCompra
             // 
@@ -733,6 +763,7 @@ namespace uniBaterFrenteLoja
             this.dgvBateriasCompra.Size = new System.Drawing.Size(638, 64);
             this.dgvBateriasCompra.TabIndex = 207;
             this.dgvBateriasCompra.Click += new System.EventHandler(this.dgvBateriasCompra_Click);
+            this.dgvBateriasCompra.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBateriasCompra_CellContentClick);
             // 
             // numQtdCompra
             // 
@@ -769,6 +800,7 @@ namespace uniBaterFrenteLoja
             this.label20.Size = new System.Drawing.Size(45, 13);
             this.label20.TabIndex = 49;
             this.label20.Text = "QTDE:";
+            this.label20.Click += new System.EventHandler(this.label20_Click);
             // 
             // label21
             // 
@@ -781,6 +813,7 @@ namespace uniBaterFrenteLoja
             this.label21.Size = new System.Drawing.Size(72, 13);
             this.label21.TabIndex = 49;
             this.label21.Text = "VALOR R$:";
+            this.label21.Click += new System.EventHandler(this.label21_Click);
             // 
             // label3
             // 
@@ -794,6 +827,7 @@ namespace uniBaterFrenteLoja
             this.label3.Size = new System.Drawing.Size(110, 13);
             this.label3.TabIndex = 49;
             this.label3.Text = "VALOR PAGO R$:";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // txtValorPago
             // 
@@ -804,6 +838,7 @@ namespace uniBaterFrenteLoja
             this.txtValorPago.Size = new System.Drawing.Size(172, 30);
             this.txtValorPago.TabIndex = 18;
             this.txtValorPago.Text = "0,00";
+            this.txtValorPago.TextChanged += new System.EventHandler(this.txtValorPago_TextChanged);
             this.txtValorPago.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox10_KeyPress);
             // 
             // txtTroco
@@ -820,6 +855,7 @@ namespace uniBaterFrenteLoja
             this.txtTroco.Size = new System.Drawing.Size(360, 38);
             this.txtTroco.TabIndex = 21;
             this.txtTroco.Text = "0,00";
+            this.txtTroco.TextChanged += new System.EventHandler(this.txtTroco_TextChanged);
             // 
             // label6
             // 
@@ -833,6 +869,7 @@ namespace uniBaterFrenteLoja
             this.label6.Size = new System.Drawing.Size(74, 13);
             this.label6.TabIndex = 49;
             this.label6.Text = "TROCO R$:";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // txtValorCompra
             // 
@@ -845,6 +882,7 @@ namespace uniBaterFrenteLoja
             this.txtValorCompra.Size = new System.Drawing.Size(74, 23);
             this.txtValorCompra.TabIndex = 16;
             this.txtValorCompra.Text = "0,00";
+            this.txtValorCompra.TextChanged += new System.EventHandler(this.txtValorCompra_TextChanged_1);
             this.txtValorCompra.Click += new System.EventHandler(this.txtValorCompra_Click);
             this.txtValorCompra.Leave += new System.EventHandler(this.txtValorCompra_TextChanged);
             this.txtValorCompra.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtValorCompra_KeyUp);
@@ -859,6 +897,7 @@ namespace uniBaterFrenteLoja
             this.txtTelefone.Name = "txtTelefone";
             this.txtTelefone.Size = new System.Drawing.Size(195, 21);
             this.txtTelefone.TabIndex = 4;
+            this.txtTelefone.MaskInputRejected += new System.Windows.Forms.MaskInputRejectedEventHandler(this.txtTelefone_MaskInputRejected);
             this.txtTelefone.Enter += new System.EventHandler(this.maskedTextBox1_Enter);
             this.txtTelefone.Click += new System.EventHandler(this.txtTelefone_Click);
             // 
@@ -883,6 +922,7 @@ namespace uniBaterFrenteLoja
             this.label22.Size = new System.Drawing.Size(96, 13);
             this.label22.TabIndex = 49;
             this.label22.Text = "SUBTOTAL R$:";
+            this.label22.Click += new System.EventHandler(this.label22_Click);
             // 
             // txtSubTotalCompra
             // 
@@ -897,6 +937,7 @@ namespace uniBaterFrenteLoja
             this.txtSubTotalCompra.Size = new System.Drawing.Size(96, 23);
             this.txtSubTotalCompra.TabIndex = 16;
             this.txtSubTotalCompra.Text = "0,00";
+            this.txtSubTotalCompra.TextChanged += new System.EventHandler(this.txtSubTotalCompra_TextChanged);
             this.txtSubTotalCompra.Click += new System.EventHandler(this.txtValorCompra_Click);
             this.txtSubTotalCompra.Leave += new System.EventHandler(this.txtValorCompra_TextChanged);
             this.txtSubTotalCompra.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSubTotalCompra_KeyPress);
@@ -908,13 +949,14 @@ namespace uniBaterFrenteLoja
             this.txtDicas.BackColor = System.Drawing.Color.White;
             this.txtDicas.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtDicas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
-            this.txtDicas.Location = new System.Drawing.Point(12, 631);
+            this.txtDicas.Location = new System.Drawing.Point(10, 630);
             this.txtDicas.Margin = new System.Windows.Forms.Padding(4);
             this.txtDicas.Name = "txtDicas";
             this.txtDicas.ReadOnly = true;
             this.txtDicas.ShortcutsEnabled = false;
             this.txtDicas.Size = new System.Drawing.Size(636, 38);
             this.txtDicas.TabIndex = 21;
+            this.txtDicas.TextChanged += new System.EventHandler(this.txtDicas_TextChanged);
             // 
             // label23
             // 
@@ -928,6 +970,7 @@ namespace uniBaterFrenteLoja
             this.label23.Size = new System.Drawing.Size(48, 13);
             this.label23.TabIndex = 49;
             this.label23.Text = "DICAS:";
+            this.label23.Click += new System.EventHandler(this.label23_Click);
             // 
             // label24
             // 
@@ -940,6 +983,7 @@ namespace uniBaterFrenteLoja
             this.label24.Size = new System.Drawing.Size(53, 13);
             this.label24.TabIndex = 49;
             this.label24.Text = "TROCA:";
+            this.label24.Click += new System.EventHandler(this.label24_Click);
             // 
             // cbTroca
             // 
@@ -951,6 +995,7 @@ namespace uniBaterFrenteLoja
             this.cbTroca.Name = "cbTroca";
             this.cbTroca.Size = new System.Drawing.Size(98, 24);
             this.cbTroca.TabIndex = 219;
+            this.cbTroca.SelectedIndexChanged += new System.EventHandler(this.cbTroca_SelectedIndexChanged);
             // 
             // dgvItens
             // 
@@ -983,6 +1028,7 @@ namespace uniBaterFrenteLoja
             this.dgvItens.StandardTab = true;
             this.dgvItens.TabIndex = 222;
             this.dgvItens.Click += new System.EventHandler(this.dgvItens_Click);
+            this.dgvItens.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvItens_CellContentClick);
             // 
             // txtSubTotalCompraSucata
             // 
@@ -992,6 +1038,7 @@ namespace uniBaterFrenteLoja
             this.txtSubTotalCompraSucata.Name = "txtSubTotalCompraSucata";
             this.txtSubTotalCompraSucata.Size = new System.Drawing.Size(197, 26);
             this.txtSubTotalCompraSucata.TabIndex = 223;
+            this.txtSubTotalCompraSucata.TextChanged += new System.EventHandler(this.txtSubTotalCompraSucata_TextChanged);
             // 
             // label25
             // 
@@ -1005,6 +1052,77 @@ namespace uniBaterFrenteLoja
             this.label25.Size = new System.Drawing.Size(124, 13);
             this.label25.TabIndex = 49;
             this.label25.Text = "TOTAL SUCATA R$:";
+            this.label25.Click += new System.EventHandler(this.label25_Click);
+            // 
+            // txtNSBateria
+            // 
+            this.txtNSBateria.Location = new System.Drawing.Point(10, 349);
+            this.txtNSBateria.Name = "txtNSBateria";
+            this.txtNSBateria.Size = new System.Drawing.Size(100, 23);
+            this.txtNSBateria.TabIndex = 227;
+            this.txtNSBateria.TextChanged += new System.EventHandler(this.txtNSBateria_TextChanged);
+            // 
+            // label26
+            // 
+            this.label26.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label26.AutoSize = true;
+            this.label26.BackColor = System.Drawing.Color.Red;
+            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.ForeColor = System.Drawing.Color.White;
+            this.label26.Location = new System.Drawing.Point(11, 333);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(85, 13);
+            this.label26.TabIndex = 49;
+            this.label26.Text = "NS BATERIA:";
+            this.label26.Click += new System.EventHandler(this.label26_Click);
+            // 
+            // label27
+            // 
+            this.label27.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label27.AutoSize = true;
+            this.label27.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.ForeColor = System.Drawing.Color.White;
+            this.label27.Location = new System.Drawing.Point(539, 105);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(50, 13);
+            this.label27.TabIndex = 230;
+            this.label27.Text = "PLACA:";
+            this.label27.Click += new System.EventHandler(this.label27_Click);
+            // 
+            // label28
+            // 
+            this.label28.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label28.AutoSize = true;
+            this.label28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label28.ForeColor = System.Drawing.Color.White;
+            this.label28.Location = new System.Drawing.Point(376, 105);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(64, 13);
+            this.label28.TabIndex = 231;
+            this.label28.Text = "VEÍCULO:";
+            this.label28.Click += new System.EventHandler(this.label28_Click);
+            // 
+            // txtVeiculo
+            // 
+            this.txtVeiculo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtVeiculo.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtVeiculo.Location = new System.Drawing.Point(376, 120);
+            this.txtVeiculo.Name = "txtVeiculo";
+            this.txtVeiculo.Size = new System.Drawing.Size(155, 21);
+            this.txtVeiculo.TabIndex = 3;
+            this.txtVeiculo.TextChanged += new System.EventHandler(this.txtVeiculo_TextChanged);
+            // 
+            // txtPlaca
+            // 
+            this.txtPlaca.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPlaca.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPlaca.Location = new System.Drawing.Point(539, 120);
+            this.txtPlaca.Name = "txtPlaca";
+            this.txtPlaca.Size = new System.Drawing.Size(109, 21);
+            this.txtPlaca.TabIndex = 3;
+            this.txtPlaca.TextChanged += new System.EventHandler(this.txtPlaca_TextChanged);
             // 
             // pictureBox19
             // 
@@ -1028,6 +1146,7 @@ namespace uniBaterFrenteLoja
             this.pictureBox18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox18.TabIndex = 225;
             this.pictureBox18.TabStop = false;
+            this.pictureBox18.Click += new System.EventHandler(this.pictureBox18_Click);
             // 
             // pictureBox10
             // 
@@ -1177,6 +1296,7 @@ namespace uniBaterFrenteLoja
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox4.TabIndex = 208;
             this.pictureBox4.TabStop = false;
+            this.pictureBox4.Click += new System.EventHandler(this.pictureBox4_Click);
             // 
             // pictureBox3
             // 
@@ -1188,6 +1308,7 @@ namespace uniBaterFrenteLoja
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox3.TabIndex = 208;
             this.pictureBox3.TabStop = false;
+            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
             // 
             // pictureBox16
             // 
@@ -1199,6 +1320,7 @@ namespace uniBaterFrenteLoja
             this.pictureBox16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox16.TabIndex = 56;
             this.pictureBox16.TabStop = false;
+            this.pictureBox16.Click += new System.EventHandler(this.pictureBox16_Click);
             // 
             // pictureBox13
             // 
@@ -1210,6 +1332,7 @@ namespace uniBaterFrenteLoja
             this.pictureBox13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox13.TabIndex = 55;
             this.pictureBox13.TabStop = false;
+            this.pictureBox13.Click += new System.EventHandler(this.pictureBox13_Click);
             // 
             // pictureBox1
             // 
@@ -1220,6 +1343,7 @@ namespace uniBaterFrenteLoja
             this.pictureBox1.Size = new System.Drawing.Size(209, 63);
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // pictureBox2
             // 
@@ -1231,6 +1355,7 @@ namespace uniBaterFrenteLoja
             this.pictureBox2.Size = new System.Drawing.Size(1030, 70);
             this.pictureBox2.TabIndex = 5;
             this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
             // Form1
             // 
@@ -1238,6 +1363,9 @@ namespace uniBaterFrenteLoja
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(1026, 714);
+            this.Controls.Add(this.label27);
+            this.Controls.Add(this.label28);
+            this.Controls.Add(this.txtNSBateria);
             this.Controls.Add(this.pictureBox19);
             this.Controls.Add(this.pictureBox18);
             this.Controls.Add(this.pictureBox10);
@@ -1293,6 +1421,7 @@ namespace uniBaterFrenteLoja
             this.Controls.Add(this.txtCodBarras);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label20);
+            this.Controls.Add(this.label26);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.txtDescProduto);
             this.Controls.Add(this.pictureBox16);
@@ -1301,6 +1430,8 @@ namespace uniBaterFrenteLoja
             this.Controls.Add(this.pictureBox13);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.txtPlaca);
+            this.Controls.Add(this.txtVeiculo);
             this.Controls.Add(this.txtNomeCliente);
             this.Controls.Add(this.txtDicas);
             this.Controls.Add(this.txtTroco);
@@ -1321,7 +1452,7 @@ namespace uniBaterFrenteLoja
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "UNIBATER - VENDA CUPOM";
+            this.Text = " ";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.menuStrip1.ResumeLayout(false);
@@ -1441,6 +1572,12 @@ namespace uniBaterFrenteLoja
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.PictureBox pictureBox18;
         private System.Windows.Forms.PictureBox pictureBox19;
+        private System.Windows.Forms.TextBox txtNSBateria;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox txtVeiculo;
+        private System.Windows.Forms.TextBox txtPlaca;
 
     }
 }

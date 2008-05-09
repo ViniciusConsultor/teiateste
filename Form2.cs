@@ -14,10 +14,8 @@ namespace uniBaterFrenteLoja
     public partial class frmCadastroCheques : Form
     {
         public int codVenda;
-        string itemSel;
         MySql objCon = new MySql();
         Form1 frm1 = new Form1();
-
 
         
         public frmCadastroCheques()
@@ -54,6 +52,16 @@ namespace uniBaterFrenteLoja
         }
 
         private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
         {
 
         }

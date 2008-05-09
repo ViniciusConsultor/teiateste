@@ -40,6 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssTecnica.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AssTecnica.Designer.cs">
+      <DependentUpon>AssTecnica.cs</DependentUpon>
+    </Compile>
     <Compile Include="combo.cs" />
     <Compile Include="conexao.cs" />
     <Compile Include="ECFSWEDA.cs" />
@@ -55,6 +61,24 @@
     <Compile Include="Form2.Designer.cs">
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form3.Designer.cs">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form4.Designer.cs">
+      <DependentUpon>Form4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form5.Designer.cs">
+      <DependentUpon>Form5.cs</DependentUpon>
+    </Compile>
     <Compile Include="login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +88,10 @@
     <Compile Include="MySql.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AssTecnica.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>AssTecnica.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Form1.cs</DependentUpon>
@@ -71,6 +99,18 @@
     <EmbeddedResource Include="Form2.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form3.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Form3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form4.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Form4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form5.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Form5.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="login.resx">
       <SubType>Designer</SubType>
@@ -80,6 +120,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="vendaOrcamento.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>vendaOrcamento.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -94,6 +138,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="venda.cs" />
+    <Compile Include="vendaOrcamento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="vendaOrcamento.Designer.cs">
+      <DependentUpon>vendaOrcamento.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

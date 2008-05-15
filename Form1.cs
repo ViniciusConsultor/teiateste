@@ -1057,7 +1057,7 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox9_Click(object sender, EventArgs e)
         {
-
+            
             try
             {
                 StringBuilder statusCupom = new StringBuilder(2);
@@ -1532,10 +1532,7 @@ namespace uniBaterFrenteLoja
 
         }
 
-        private void label16_Click(object sender, EventArgs e)
-        {
-
-        }
+     
 
         private void label20_Click(object sender, EventArgs e)
         {

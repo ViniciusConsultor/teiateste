@@ -625,7 +625,6 @@ namespace uniBaterFrenteLoja
             this.label16.Size = new System.Drawing.Size(156, 13);
             this.label16.TabIndex = 49;
             this.label16.Text = "FORMA DE PAGAMENTO:";
-            this.label16.Click += new System.EventHandler(this.label16_Click);
             // 
             // cbFormaPagamento
             // 

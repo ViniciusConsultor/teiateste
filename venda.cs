@@ -71,7 +71,7 @@ namespace uniBaterFrenteLoja
 
             topoCupom.Append("+----------------------------------------------+");
             topoCupom.Append("|            UNIBATER - ORCAMENTO              |");
-            topoCupom.Append("|  CUPOM:ccc VENDEDOR:vvv  LOJA:lll CAIXA:ccc  |");
+            topoCupom.Append("|  CUPOM:ccc VENDEDOR:vvv  LOJA:lll CAIXA:xxx  |");
             topoCupom.Append("|  DATA:dd/mm/aaaa              HORA:hh:mm:ss  |");
             topoCupom.Append("+----------------------------------------------+");
 
@@ -89,15 +89,33 @@ namespace uniBaterFrenteLoja
             string horaOrcamento = data.ToString("hh:mm:ss");
 
             cabecalho = cabecalho.Replace("ccc", numCupom);
-            cabecalho = cabecalho.Replace("ccc", numCaixa);
+            cabecalho = cabecalho.Replace("xxx", numCaixa);
             cabecalho = cabecalho.Replace("dd/mm/aaaa", dataOrcamento);
             cabecalho = cabecalho.Replace("hh:mm:ss", horaOrcamento);
-
+            cabecalho = cabecalho.Replace("vvv", numVendedor);
             cabecalho = cabecalho.Replace("lll", numLoja);
 
+            StringBuilder corpoCupom = new StringBuilder();
+            corpoCupom.Append("DESCRICAO                 QTD  VL. U.   SUBTOTAL");
+            string item = "DDDDDDDDDDDDDDDDDDDDDDDDD QQQ  VVVVVVVV VVVVVVVV";
+            DataTable dt = retornaItens(cupom);
+
+            //campos retornados pelo "retornaItens(cupom)"
+            //SELECT ubitem.id ID,itemCodigo COD ,itemQuantidade QTDE,itemValorVenda UNIDADE, (itemQuantidade * itemValorVenda) SUBTOTAL,pdDescProd  from ubitem,ubprod where codVenda =27 and itemCodigo = ubprod.id
+            foreach (DataRow dr in dt.Rows)
+            {
+                string descricao = string.Format("{0,-25}",dr["pdDescProd"].ToString());
+                descricao = descricao.Replace(' ', '.');
+                string novoItem = item.Replace("DDDDDDDDDDDDDDDDDDDDDDDDD", descricao);
+                corpoCupom.Append(novoItem);
+            }
+            
+            string corpo = corpoCupom.ToString();
+
+            string cupomCompleto = cabecalho + corpo;
 
             porta.Open();
-            porta.WriteLine(cabecalho);
+            porta.WriteLine(cupomCompleto);
             porta.Close();
 
             return cabecalho;
@@ -186,7 +204,7 @@ namespace uniBaterFrenteLoja
         {
             MySqlParameter[] par = new MySqlParameter[1];
             par[0] = new MySqlParameter("?codVenda",codVenda);
-            string comando = "SELECT id ID,itemCodigo COD ,itemQuantidade QTDE,itemValorVenda UNIDADE, (itemQuantidade * itemValorVenda) SUBTOTAL from ubitem where codVenda = ?codVenda;";
+            string comando = "SELECT ubitem.id ID,itemCodigo COD ,itemQuantidade QTDE,itemValorVenda UNIDADE, (itemQuantidade * itemValorVenda) SUBTOTAL,pdDescProd  from ubitem,ubprod where codVenda = ?codVenda and itemCodigo = ubprod.id";
            return objBanco.RetornaDataTable(_conn, CommandType.Text, comando, par);
         }
 
@@ -475,7 +493,11 @@ namespace uniBaterFrenteLoja
 
 
             if (flag == "+") 
-            { 
+            {
+                //montaOrcamento(int cupom, int loja, int caixa, int vendedor) 
+                
+                montaOrcamento(codVenda, login.idLoja, frmTela.caixa, login.idUsuario);
+
                 frmTela.txtTroco.Text = valor;
 
                 frmTela.txtDicas.Text = "OBRIGADO, VOLTE SEMPRE!";

@@ -7,4 +7,9 @@ obj\Debug\uniBaterFrenteLoja.csproj.GenerateResource.Cache
 obj\Debug\uniBaterFrenteLoja.exe
 obj\Debug\uniBaterFrenteLoja.pdb
 obj\Debug\uniBaterFrenteLoja.login.resources
-obj\Debug\uniBaterFrenteLoja.Form2.resources
+obj\Debug\uniBaterFrenteLoja.AssTecnica.resources
+obj\Debug\uniBaterFrenteLoja.frmCadastroCheques.resources
+obj\Debug\uniBaterFrenteLoja.Form3.resources
+obj\Debug\uniBaterFrenteLoja.Form4.resources
+obj\Debug\uniBaterFrenteLoja.Form5.resources
+obj\Debug\uniBaterFrenteLoja.vendaOrcamento.resources

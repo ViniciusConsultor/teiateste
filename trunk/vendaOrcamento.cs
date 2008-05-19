@@ -18,7 +18,7 @@ namespace uniBaterFrenteLoja
         Form1 frm1 =new Form1();
         venda objVenda = new venda(Form1.conexao);
         string codCliente;
-        int caixa;
+        public int caixa;
         public int numVenda = 0;
         int itemEncontrado = 0;
         DataRow drItem;
@@ -109,7 +109,6 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox7_Click(object sender, EventArgs e)
         {
-            //objVenda.montaOrcamento(1, 1, 1,1);
 
             if (numVenda == 0)
             {
@@ -122,8 +121,8 @@ namespace uniBaterFrenteLoja
                try
                   {
                    string retorno = objVenda.efetuaPagamento(numVenda, Convert.ToDecimal(txtTotal.Text), Convert.ToDecimal(txtValorPago.Text), formaPagamento);
-                   objVenda.trataRetornoPagamento(retorno, this, numVenda);
                    dgvPagamentos.DataSource = objVenda.retornaPagamentosEfetuados(numVenda);
+                   objVenda.trataRetornoPagamento(retorno, this, numVenda);
                    txtValorPago.ResetText();
                }
                catch { }

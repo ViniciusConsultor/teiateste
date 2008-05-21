@@ -144,6 +144,7 @@ namespace uniBaterFrenteLoja
                         stCodVenda.Text = "CÓDIGO DA VENDA: " + numVenda.ToString();
                         txtDicas.Text = "CÓDIGO DA VENDA: " + numVenda.ToString();
                         dgvItens.DataSource = objVenda.retornaItens(numVenda);
+                        dgvPagamentos.DataSource = null;
                     }
                     else
                     {

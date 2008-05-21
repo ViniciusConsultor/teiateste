@@ -62,6 +62,12 @@ namespace uniBaterFrenteLoja
             }
           
         }
+
+        public DataTable retornaMensagem() 
+        {
+            string comando = "SELECT * FROM ubmensagem_rodape";
+            return objBanco.RetornaDataTable(_conn, CommandType.Text, comando);
+        }
         
         public string montaOrcamento(int cupom, int loja, int caixa, int vendedor) 
         {
@@ -70,7 +76,7 @@ namespace uniBaterFrenteLoja
             StringBuilder topoCupom = new StringBuilder();
 
             topoCupom.Append("+----------------------------------------------+");
-            topoCupom.Append("|            UNIBATER - ORCAMENTO              |");
+            topoCupom.Append("|        U   N   I   B   A   T   E   R         |");
             topoCupom.Append("|  CUPOM:ccc VENDEDOR:vvv  LOJA:lll CAIXA:xxx  |");
             topoCupom.Append("|  DATA:dd/mm/aaaa              HORA:hh:mm:ss  |");
             topoCupom.Append("+----------------------------------------------+");
@@ -96,28 +102,91 @@ namespace uniBaterFrenteLoja
             cabecalho = cabecalho.Replace("lll", numLoja);
 
             StringBuilder corpoCupom = new StringBuilder();
-            corpoCupom.Append("DESCRICAO                 QTD  VL. U.   SUBTOTAL");
-            string item = "DDDDDDDDDDDDDDDDDDDDDDDDD QQQ  VVVVVVVV VVVVVVVV";
+            corpoCupom.Append("DESCRICAO             QTD   VL.UN.    SUBTOTAL  ");
+                        //"+----------------------------------------------+"
+                string item = "DDDDDDDDDDDDDDDDDDDDD QQQ x VVVVVVVVV SSSSSSSSSS";
             DataTable dt = retornaItens(cupom);
 
             //campos retornados pelo "retornaItens(cupom)"
             //SELECT ubitem.id ID,itemCodigo COD ,itemQuantidade QTDE,itemValorVenda UNIDADE, (itemQuantidade * itemValorVenda) SUBTOTAL,pdDescProd  from ubitem,ubprod where codVenda =27 and itemCodigo = ubprod.id
+
+            decimal TotalCupom = 0;
+            
             foreach (DataRow dr in dt.Rows)
             {
-                string descricao = string.Format("{0,-25}",dr["pdDescProd"].ToString());
+                string descricao = string.Format("{0,-21}",dr["pdDescProd"]);
+                string qtd = Convert.ToInt32(dr["QTDE"]).ToString("000");
+                string vlUnitario = string.Format("{0,9}", dr["UNIDADE"]);
+                string vlSub = string.Format("{0,10}", dr["SUBTOTAL"]);
+
                 descricao = descricao.Replace(' ', '.');
-                string novoItem = item.Replace("DDDDDDDDDDDDDDDDDDDDDDDDD", descricao);
+                string novoItem = item.Replace("DDDDDDDDDDDDDDDDDDDDD", descricao);
+                novoItem = novoItem.Replace("QQQ", qtd);
+                novoItem = novoItem.Replace("VVVVVVVVV", vlUnitario);
+                novoItem = novoItem.Replace("SSSSSSSSSS", vlSub);
+
                 corpoCupom.Append(novoItem);
+                TotalCupom = TotalCupom + Convert.ToDecimal(dr["UNIDADE"]) * Convert.ToDecimal(dr["QTDE"]);
             }
-            
+
             string corpo = corpoCupom.ToString();
+            
 
-            string cupomCompleto = cabecalho + corpo;
 
+            StringBuilder rodapeCupom = new StringBuilder();
+            rodapeCupom.Append("------------------------------------------------");
+            
+            dt = retornaPagamentosEfetuados(cupom);
+
+            decimal TotalPago = 0;
+
+            foreach (DataRow dr in dt.Rows)
+            {
+                string forma = string.Format("{0,16}", dr[1].ToString());
+                string valor = string.Format("{0,12}", dr[0].ToString());
+                string novaForma = "                  FFFFFFFFFFFFFFF: TTTTTTTTTTTT";
+                novaForma = novaForma.Replace("FFFFFFFFFFFFFFF", forma);
+                novaForma = novaForma.Replace("TTTTTTTTTTTT", valor);
+                rodapeCupom.Append(novaForma);
+                TotalPago = TotalPago + Convert.ToDecimal(dr[0]);
+            }
+            rodapeCupom.Append("------------------------------------------------");
+            string LinhaTotal = "                             TOTAL: TTTTTTTTTTTT";
+            string valorTotal = string.Format("{0,12}",TotalCupom);
+            LinhaTotal = LinhaTotal.Replace("TTTTTTTTTTTT", valorTotal);
+
+            string rodape = "------------------------------------------------";
+            rodape = rodape + LinhaTotal;
+            string LinhaPAGO = "                        TOTAL PAGO: TTTTTTTTTTTT";
+            string valorTotalPago = string.Format("{0,12}",TotalPago);
+            LinhaPAGO = LinhaPAGO.Replace("TTTTTTTTTTTT", valorTotalPago);
+            rodapeCupom.Append(LinhaPAGO);
+
+            decimal Troco = TotalPago - TotalCupom;
+            string valorTroco = string.Format("{0,12}", Troco);
+            string LinhaTroco = "                             TROCO: TTTTTTTTTTTT";
+            LinhaTroco = LinhaTroco.Replace("TTTTTTTTTTTT", valorTroco);
+            rodapeCupom.Append(LinhaTroco);
+            rodapeCupom.Append("------------------------------------------------");
+
+            dt = retornaMensagem();
+            foreach (DataRow dr in dt.Rows)
+            {
+                string mensagem = string.Format("{0,-48}", dr["mensagem"]);
+                rodapeCupom.Append(mensagem);
+            }
+            rodapeCupom.Append("------------------------------------------------");
+
+            for (int i=0; i <= 5; i++)
+            {
+                rodapeCupom.Append("                                                ");
+            }
+
+            rodape = rodape + rodapeCupom.ToString();
+            string cupomCompleto = cabecalho + corpo + rodape;
             porta.Open();
             porta.WriteLine(cupomCompleto);
             porta.Close();
-
             return cabecalho;
         }
 

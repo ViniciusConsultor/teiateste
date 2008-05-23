@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO.Ports;
 using System.Xml;
 using System.Collections;
+using MySql.Data.MySqlClient;
 
 
 namespace uniBaterFrenteLoja
@@ -22,8 +23,8 @@ namespace uniBaterFrenteLoja
         public int numVenda = 0;
         int itemEncontrado = 0;
         DataRow drItem;
-
-
+        int codCompra = 0;
+        
         public vendaOrcamento()
         {
             InitializeComponent();
@@ -182,6 +183,8 @@ namespace uniBaterFrenteLoja
 
         private void vendaOrcamento_Load(object sender, EventArgs e)
         {
+            objVenda.retornaModelosSucata(cbTipoBateria);
+            
             cbFormaPagamento.DataSource = objVenda.retornaFomasPagamentos();
             cbFormaPagamento.DisplayMember = objVenda.retornaFomasPagamentos().Columns[0].ToString();
 
@@ -321,6 +324,56 @@ namespace uniBaterFrenteLoja
                 e.KeyChar = (char)(44);
             }
         }
+
+        private void pictureBox14_Click(object sender, EventArgs e)
+        {
+            codCompra = objVenda.novaCompra(txtNomeCliente.Text, txtCpfCnpj.Text, login.idLoja, login.idUsuario);
+            dgvBateriasCompra.DataSource = objVenda.listaCompraSucata(codCompra);
+            tsCodigoCompra.Text = "CÓDIGO DA COMPRA: " + codCompra;
+        }
+
+        private void cbTipoBateria_SelectedValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox15_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(cbTipoBateria.SelectedValue.ToString());
+        }
+
+        private void pictureBox8_Click(object sender, EventArgs e)
+        {
+            if (codCompra == 0)
+            {
+                txtDicas.Text = "NÃO HÁ COMPRA INICIADA.";
+            }
+            else
+            {
+                
+                try
+                {
+                    if (txtValorCompra.Text == "0")
+                    {
+                        throw new FormatException();
+                    }
+                    dgvBateriasCompra.DataSource = objVenda.insereSucata(Convert.ToInt32(cbTipoBateria.SelectedValue), numQtdCompra.Value, Convert.ToDecimal(txtValorCompra.Text), cbTroca.SelectedIndex, codCompra);
+                }
+                catch (FormatException)
+                {
+                    txtDicas.Text = "VALOR INVÁLIDO";
+                }
+                catch (MySqlException)
+                {
+                    txtDicas.Text = "ESCOLHA A OPÇÃO 'TROCA'";
+                }
+                
+                
+
+             }
+
+        }
+
 
     
 

@@ -71,19 +71,29 @@ namespace uniBaterFrenteLoja
         
         public string montaOrcamento(int cupom, int loja, int caixa, int vendedor) 
         {
+            string crlf = ((char)13).ToString() + ((char)10).ToString();
+
             SerialPort porta = new SerialPort("COM1", 9600, Parity.None, 8, StopBits.One);
 
             StringBuilder topoCupom = new StringBuilder();
 
-            topoCupom.Append("+----------------------------------------------+");
-            topoCupom.Append("|        U   N   I   B   A   T   E   R         |");
-            topoCupom.Append("|  CUPOM:ccc VENDEDOR:vvv  LOJA:lll CAIXA:xxx  |");
-            topoCupom.Append("|  DATA:dd/mm/aaaa              HORA:hh:mm:ss  |");
-            topoCupom.Append("+----------------------------------------------+");
+            string comando = "SELECT ljNome,ljEndereco,ljCidade,ljUf,ljCgc,ljInsEstadual from ubLoja WHERE id = " + loja;
+            DataRow drLoja = objBanco.RetornaDataRow(_conn, CommandType.Text, comando);
+
+
+            topoCupom.Append("LOJA: "+ drLoja["ljNome"] + crlf);
+            topoCupom.Append(drLoja["ljEndereco"] + crlf);
+            topoCupom.Append(drLoja["ljCidade"]+ "-"+ drLoja["ljUf"] + crlf);
+            topoCupom.Append("CNPJ: " + drLoja["ljCgc"] + crlf);
+            topoCupom.Append("IE: " + drLoja["ljInsEstadual"] + crlf);
+            topoCupom.Append("+----------------------------------------------+" + crlf);
+            topoCupom.Append("|  CUPOM:cccccc  VEND.:vvv  LOJA:lll CAIXA:xxx |" + crlf);
+            topoCupom.Append("|  DATA:dd/mm/aaaa              HORA:hh:mm:ss  |" + crlf);
+            topoCupom.Append("+----------------------------------------------+" + crlf);
 
             string cabecalho = topoCupom.ToString();
 
-            string numCupom = cupom.ToString("000");
+            string numCupom = cupom.ToString("000000");
             string numLoja = loja.ToString("000");
             string numVendedor = vendedor.ToString("000");
             string numCaixa = caixa.ToString("000");
@@ -94,7 +104,7 @@ namespace uniBaterFrenteLoja
             string dataOrcamento = data.ToString("dd/MM/yyyy");
             string horaOrcamento = data.ToString("hh:mm:ss");
 
-            cabecalho = cabecalho.Replace("ccc", numCupom);
+            cabecalho = cabecalho.Replace("cccccc", numCupom);
             cabecalho = cabecalho.Replace("xxx", numCaixa);
             cabecalho = cabecalho.Replace("dd/mm/aaaa", dataOrcamento);
             cabecalho = cabecalho.Replace("hh:mm:ss", horaOrcamento);
@@ -104,7 +114,7 @@ namespace uniBaterFrenteLoja
             StringBuilder corpoCupom = new StringBuilder();
             corpoCupom.Append("DESCRICAO             QTD   VL.UN.    SUBTOTAL  ");
                         //"+----------------------------------------------+"
-                string item = "DDDDDDDDDDDDDDDDDDDDD QQQ x VVVVVVVVV SSSSSSSSSS";
+            string item = "DDDDDDDDDDDDDDDDDDDDD QQQ x VVVVVVVVV SSSSSSSSSS" + crlf;
             DataTable dt = retornaItens(cupom);
 
             //campos retornados pelo "retornaItens(cupom)"
@@ -134,7 +144,7 @@ namespace uniBaterFrenteLoja
 
 
             StringBuilder rodapeCupom = new StringBuilder();
-            rodapeCupom.Append("------------------------------------------------");
+            rodapeCupom.Append("------------------------------------------------" + crlf);
             
             dt = retornaPagamentosEfetuados(cupom);
 
@@ -144,30 +154,40 @@ namespace uniBaterFrenteLoja
             {
                 string forma = string.Format("{0,16}", dr[1].ToString());
                 string valor = string.Format("{0,12}", dr[0].ToString());
-                string novaForma = "                  FFFFFFFFFFFFFFF: TTTTTTTTTTTT";
+                string novaForma = "                  FFFFFFFFFFFFFFF: TTTTTTTTTTTT" + crlf;
                 novaForma = novaForma.Replace("FFFFFFFFFFFFFFF", forma);
                 novaForma = novaForma.Replace("TTTTTTTTTTTT", valor);
                 rodapeCupom.Append(novaForma);
                 TotalPago = TotalPago + Convert.ToDecimal(dr[0]);
             }
-            rodapeCupom.Append("------------------------------------------------");
-            string LinhaTotal = "                             TOTAL: TTTTTTTTTTTT";
+            rodapeCupom.Append("------------------------------------------------" + crlf);
+            string LinhaTotal = "                             TOTAL: TTTTTTTTTTTT" + crlf;
             string valorTotal = string.Format("{0,12}",TotalCupom);
             LinhaTotal = LinhaTotal.Replace("TTTTTTTTTTTT", valorTotal);
 
             string rodape = "------------------------------------------------";
             rodape = rodape + LinhaTotal;
-            string LinhaPAGO = "                        TOTAL PAGO: TTTTTTTTTTTT";
+            string LinhaPAGO = "                        TOTAL PAGO: TTTTTTTTTTTT" + crlf;
             string valorTotalPago = string.Format("{0,12}",TotalPago);
             LinhaPAGO = LinhaPAGO.Replace("TTTTTTTTTTTT", valorTotalPago);
             rodapeCupom.Append(LinhaPAGO);
 
             decimal Troco = TotalPago - TotalCupom;
             string valorTroco = string.Format("{0,12}", Troco);
-            string LinhaTroco = "                             TROCO: TTTTTTTTTTTT";
+            string LinhaTroco = "                             TROCO: TTTTTTTTTTTT" + crlf;
             LinhaTroco = LinhaTroco.Replace("TTTTTTTTTTTT", valorTroco);
             rodapeCupom.Append(LinhaTroco);
-            rodapeCupom.Append("------------------------------------------------");
+            rodapeCupom.Append("------------------------------------------------" + crlf);
+
+
+            //DADOS DO COMPRADOR
+
+            DataRow drCliente = retornaDadosCliente(cupom);
+            rodapeCupom.Append("CLIENTE: "+drCliente["cfNome"] + crlf);
+            rodapeCupom.Append("DOC.: " + drCliente["cfCadastroPJ"] + crlf);
+            rodapeCupom.Append("ASSINATURA:_____________________________________"+ crlf);
+            rodapeCupom.Append("------------------------------------------------" + crlf);
+
 
             dt = retornaMensagem();
             foreach (DataRow dr in dt.Rows)
@@ -175,7 +195,7 @@ namespace uniBaterFrenteLoja
                 string mensagem = string.Format("{0,-48}", dr["mensagem"]);
                 rodapeCupom.Append(mensagem);
             }
-            rodapeCupom.Append("------------------------------------------------");
+            rodapeCupom.Append("------------------------------------------------"+ crlf);
 
             for (int i=0; i <= 5; i++)
             {
@@ -183,7 +203,8 @@ namespace uniBaterFrenteLoja
             }
 
             rodape = rodape + rodapeCupom.ToString();
-            string cupomCompleto = cabecalho + corpo + rodape;
+
+            string cupomCompleto = cabecalho + corpo + rodape ;
             porta.Open();
             porta.WriteLine(cupomCompleto);
             porta.Close();
@@ -591,6 +612,78 @@ namespace uniBaterFrenteLoja
             }
 
 
+        }
+
+        public int novaCompra(string nome,string doc,int loja,int func) 
+        {
+            //comando = "INSERT INTO ubvencomsucata SET id=?id, sunome=?nome, suPj=?doc, suDia=?data, suLoja=?loja, suFunc=?funcionario,sutipo='1'";
+            //comando = "SELECT  ubitemsucata.id 'ITEM',itvencomsucata 'COMPRA',suprod 'PRODUTO',itprod 'COD. PROD.',itquant 'QUANTIDADE', itvalor 'VALOR',itvalor * itquant  SUBTOTAL  FROM ubitemsucata,ubsucataprod WHERE itvencomsucata = ?venda and ubitemsucata.itprod = ubsucataprod.id order by ubitemsucata.id desc  ";
+            //comando = "SELECT sum(itquant * itvalor) SUBTOTAL from ubitemsucata where itvencomsucata = ?venda";
+            string comando = "SELECT id FROM ubvencomsucata ORDER BY id DESC";
+            int codComVen;
+                MySqlParameter[] par = new MySqlParameter[6];
+            try
+            {
+                DataRow drIdVenda = objBanco.RetornaDataRow(_conn, CommandType.Text, comando);
+                codComVen = Convert.ToInt32(drIdVenda["id"]);
+                codComVen = ++codComVen;
+                par[0] = new MySqlParameter("?id",codComVen);
+                par[1] = new MySqlParameter("?nome",nome);
+                par[2] = new MySqlParameter("?doc",doc);
+                par[3] = new MySqlParameter("?data",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                par[4] = new MySqlParameter("?loja",loja);
+                par[5] = new MySqlParameter("?funcionario", func);
+
+                comando = "INSERT INTO ubvencomsucata SET id=?id, sunome=?nome, suPj=?doc, suDia=?data, suLoja=?loja, suFunc=?funcionario, sutipo='1'";
+                objBanco.ExecuteNonQuery(_conn, CommandType.Text, comando,par);
+            }
+            catch
+            {
+                codComVen = 1;
+                par[0] = new MySqlParameter("?id", codComVen);
+                par[1] = new MySqlParameter("?nome",nome);
+                par[2] = new MySqlParameter("?doc",doc);
+                par[3] = new MySqlParameter("?data",DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                par[4] = new MySqlParameter("?loja",loja);
+                par[5] = new MySqlParameter("?funcionario", func);
+
+                comando = "INSERT INTO ubvencomsucata SET id=?id, sunome=?nome, suPj=?doc, suDia=?data, suLoja=?loja, suFunc=?funcionario, sutipo='1'";
+                objBanco.ExecuteNonQuery(_conn, CommandType.Text, comando,par);
+            }
+
+            listaCompraSucata(codComVen);
+            return codComVen;
+                      
+
+        }
+
+        public void retornaModelosSucata(ComboBox combo) 
+        {
+            string comando = "SELECT id,suprod FROM ubsucataprod";
+            DataTable  dtLista   = objBanco.RetornaDataTable(_conn,CommandType.Text,comando);
+            combo.ValueMember = dtLista.Columns[0].ToString();
+            combo.DisplayMember = dtLista.Columns[1].ToString();
+            combo.DataSource = dtLista;
+        }
+
+       public DataTable listaCompraSucata(int codComVen)
+       {
+            string  comando = "SELECT  ubitemsucata.id 'ITEM',itvencomsucata 'COMPRA',suprod 'PRODUTO',itprod 'COD. PROD.',itquant 'QUANTIDADE', itvalor 'VALOR',itvalor * itquant  SUBTOTAL  FROM ubitemsucata,ubsucataprod WHERE itvencomsucata = '" + codComVen + "' and ubitemsucata.itprod = ubsucataprod.id order by ubitemsucata.id desc  ";
+            return objBanco.RetornaDataTable(_conn, CommandType.Text, comando);
+       }
+
+        public DataTable insereSucata(int tipoBateria, decimal quantidade, decimal valor, int baseTroca,int compra)
+        {
+            MySqlParameter[] par = new MySqlParameter[5];
+            par[0] = new MySqlParameter("?itprod", tipoBateria);
+            par[1] = new MySqlParameter("?itquant", quantidade);
+            par[2] = new MySqlParameter("?itvalor", valor);
+            par[3] = new MySqlParameter("?itvencomsucata", compra);
+            par[4] = new MySqlParameter("?baseTroca", baseTroca);
+
+            string comando = "INSERT INTO ubitemsucata SET itprod=?itprod, itquant=?itquant, itvalor=?itvalor, itvencomsucata=?itvencomsucata, baseTroca = ?baseTroca";
+            objBanco.ExecuteNonQuery(_conn, CommandType.Text, comando, par);
+            return listaCompraSucata(compra);
         }
     
     }

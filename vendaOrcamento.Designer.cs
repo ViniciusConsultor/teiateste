@@ -30,12 +30,12 @@ namespace uniBaterFrenteLoja
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(vendaOrcamento));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label27 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.txtNSBateria = new System.Windows.Forms.TextBox();
@@ -74,8 +74,6 @@ namespace uniBaterFrenteLoja
             this.txtSubTotal = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
-            this.txtSubTotalCompra = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
             this.txtValorCompra = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
             this.txtValor = new System.Windows.Forms.TextBox();
@@ -232,14 +230,14 @@ namespace uniBaterFrenteLoja
             this.dgvItens.BackgroundColor = System.Drawing.Color.White;
             this.dgvItens.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvItens.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvItens.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
+            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvItens.DefaultCellStyle = dataGridViewCellStyle19;
             this.dgvItens.EnableHeadersVisualStyles = false;
             this.dgvItens.Location = new System.Drawing.Point(657, 148);
             this.dgvItens.MultiSelect = false;
@@ -259,23 +257,25 @@ namespace uniBaterFrenteLoja
             // 
             this.pictureBox15.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox15.Image = global::uniBaterFrenteLoja.Properties.Resources.btnCan;
-            this.pictureBox15.Location = new System.Drawing.Point(585, 363);
+            this.pictureBox15.Location = new System.Drawing.Point(551, 369);
             this.pictureBox15.Name = "pictureBox15";
             this.pictureBox15.Size = new System.Drawing.Size(28, 28);
             this.pictureBox15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox15.TabIndex = 302;
             this.pictureBox15.TabStop = false;
+            this.pictureBox15.Click += new System.EventHandler(this.pictureBox15_Click);
             // 
             // pictureBox14
             // 
             this.pictureBox14.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox14.Image = global::uniBaterFrenteLoja.Properties.Resources.btnNew;
-            this.pictureBox14.Location = new System.Drawing.Point(619, 363);
+            this.pictureBox14.Location = new System.Drawing.Point(585, 369);
             this.pictureBox14.Name = "pictureBox14";
             this.pictureBox14.Size = new System.Drawing.Size(28, 28);
             this.pictureBox14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox14.TabIndex = 301;
             this.pictureBox14.TabStop = false;
+            this.pictureBox14.Click += new System.EventHandler(this.pictureBox14_Click);
             // 
             // pictureBox17
             // 
@@ -293,7 +293,7 @@ namespace uniBaterFrenteLoja
             // 
             this.pictureBox12.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox12.Image = global::uniBaterFrenteLoja.Properties.Resources.btnDel;
-            this.pictureBox12.Location = new System.Drawing.Point(550, 363);
+            this.pictureBox12.Location = new System.Drawing.Point(517, 369);
             this.pictureBox12.Name = "pictureBox12";
             this.pictureBox12.Size = new System.Drawing.Size(28, 28);
             this.pictureBox12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -306,7 +306,7 @@ namespace uniBaterFrenteLoja
             this.cbTroca.Items.AddRange(new object[] {
             "NÃO",
             "SIM"});
-            this.cbTroca.Location = new System.Drawing.Point(413, 368);
+            this.cbTroca.Location = new System.Drawing.Point(413, 369);
             this.cbTroca.Name = "cbTroca";
             this.cbTroca.Size = new System.Drawing.Size(98, 21);
             this.cbTroca.TabIndex = 298;
@@ -359,12 +359,13 @@ namespace uniBaterFrenteLoja
             // 
             this.pictureBox8.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
-            this.pictureBox8.Location = new System.Drawing.Point(515, 363);
+            this.pictureBox8.Location = new System.Drawing.Point(619, 369);
             this.pictureBox8.Name = "pictureBox8";
             this.pictureBox8.Size = new System.Drawing.Size(28, 28);
             this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox8.TabIndex = 294;
             this.pictureBox8.TabStop = false;
+            this.pictureBox8.Click += new System.EventHandler(this.pictureBox8_Click);
             // 
             // txtValorPago
             // 
@@ -439,13 +440,13 @@ namespace uniBaterFrenteLoja
             // dgvBateriasCompra
             // 
             this.dgvBateriasCompra.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.NullValue = null;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
-            this.dgvBateriasCompra.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            dataGridViewCellStyle20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle20.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle20.NullValue = null;
+            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
+            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.Color.White;
+            this.dgvBateriasCompra.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle20;
             this.dgvBateriasCompra.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
@@ -453,38 +454,38 @@ namespace uniBaterFrenteLoja
             this.dgvBateriasCompra.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvBateriasCompra.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dgvBateriasCompra.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvBateriasCompra.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvBateriasCompra.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
             this.dgvBateriasCompra.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvBateriasCompra.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
+            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvBateriasCompra.DefaultCellStyle = dataGridViewCellStyle22;
             this.dgvBateriasCompra.EnableHeadersVisualStyles = false;
             this.dgvBateriasCompra.Location = new System.Drawing.Point(9, 400);
             this.dgvBateriasCompra.MultiSelect = false;
             this.dgvBateriasCompra.Name = "dgvBateriasCompra";
             this.dgvBateriasCompra.ReadOnly = true;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvBateriasCompra.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvBateriasCompra.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle23.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle23.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvBateriasCompra.RowHeadersDefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvBateriasCompra.RowsDefaultCellStyle = dataGridViewCellStyle24;
             this.dgvBateriasCompra.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvBateriasCompra.Size = new System.Drawing.Size(638, 90);
             this.dgvBateriasCompra.TabIndex = 288;
@@ -510,18 +511,19 @@ namespace uniBaterFrenteLoja
             this.cbTipoCliente.Items.AddRange(new object[] {
             "Varejista",
             "Atacadista"});
-            this.cbTipoCliente.Location = new System.Drawing.Point(184, 214);
+            this.cbTipoCliente.Location = new System.Drawing.Point(189, 214);
             this.cbTipoCliente.Name = "cbTipoCliente";
-            this.cbTipoCliente.Size = new System.Drawing.Size(213, 23);
+            this.cbTipoCliente.Size = new System.Drawing.Size(208, 23);
             this.cbTipoCliente.TabIndex = 248;
             // 
             // cbTipoBateria
             // 
             this.cbTipoBateria.FormattingEnabled = true;
-            this.cbTipoBateria.Location = new System.Drawing.Point(9, 368);
+            this.cbTipoBateria.Location = new System.Drawing.Point(115, 369);
             this.cbTipoBateria.Name = "cbTipoBateria";
             this.cbTipoBateria.Size = new System.Drawing.Size(158, 21);
             this.cbTipoBateria.TabIndex = 257;
+            this.cbTipoBateria.SelectedValueChanged += new System.EventHandler(this.cbTipoBateria_SelectedValueChanged);
             // 
             // cbFormaPagamento
             // 
@@ -592,7 +594,7 @@ namespace uniBaterFrenteLoja
             this.label17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label17.ForeColor = System.Drawing.Color.White;
-            this.label17.Location = new System.Drawing.Point(184, 198);
+            this.label17.Location = new System.Drawing.Point(189, 198);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(117, 13);
             this.label17.TabIndex = 239;
@@ -649,37 +651,11 @@ namespace uniBaterFrenteLoja
             this.label24.TabIndex = 279;
             this.label24.Text = "TROCA:";
             // 
-            // txtSubTotalCompra
-            // 
-            this.txtSubTotalCompra.BackColor = System.Drawing.Color.White;
-            this.txtSubTotalCompra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSubTotalCompra.ForeColor = System.Drawing.Color.Black;
-            this.txtSubTotalCompra.Location = new System.Drawing.Point(311, 369);
-            this.txtSubTotalCompra.Margin = new System.Windows.Forms.Padding(4);
-            this.txtSubTotalCompra.Name = "txtSubTotalCompra";
-            this.txtSubTotalCompra.ReadOnly = true;
-            this.txtSubTotalCompra.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.txtSubTotalCompra.Size = new System.Drawing.Size(96, 23);
-            this.txtSubTotalCompra.TabIndex = 259;
-            this.txtSubTotalCompra.Text = "0,00";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
-            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.ForeColor = System.Drawing.Color.White;
-            this.label22.Location = new System.Drawing.Point(311, 351);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(96, 13);
-            this.label22.TabIndex = 280;
-            this.label22.Text = "SUBTOTAL R$:";
-            // 
             // txtValorCompra
             // 
             this.txtValorCompra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtValorCompra.ForeColor = System.Drawing.Color.Black;
-            this.txtValorCompra.Location = new System.Drawing.Point(227, 369);
+            this.txtValorCompra.Location = new System.Drawing.Point(333, 369);
             this.txtValorCompra.Margin = new System.Windows.Forms.Padding(4);
             this.txtValorCompra.Name = "txtValorCompra";
             this.txtValorCompra.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -693,7 +669,7 @@ namespace uniBaterFrenteLoja
             this.label21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label21.ForeColor = System.Drawing.Color.White;
-            this.label21.Location = new System.Drawing.Point(229, 351);
+            this.label21.Location = new System.Drawing.Point(335, 351);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(72, 13);
             this.label21.TabIndex = 284;
@@ -807,7 +783,7 @@ namespace uniBaterFrenteLoja
             this.label19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label19.ForeColor = System.Drawing.Color.White;
-            this.label19.Location = new System.Drawing.Point(10, 351);
+            this.label19.Location = new System.Drawing.Point(116, 351);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(118, 13);
             this.label19.TabIndex = 267;
@@ -870,7 +846,7 @@ namespace uniBaterFrenteLoja
             this.label20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(118)))), ((int)(((byte)(188)))));
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.ForeColor = System.Drawing.Color.White;
-            this.label20.Location = new System.Drawing.Point(175, 351);
+            this.label20.Location = new System.Drawing.Point(281, 351);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(45, 13);
             this.label20.TabIndex = 272;
@@ -916,7 +892,7 @@ namespace uniBaterFrenteLoja
             // numQtdCompra
             // 
             this.numQtdCompra.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numQtdCompra.Location = new System.Drawing.Point(175, 368);
+            this.numQtdCompra.Location = new System.Drawing.Point(281, 369);
             this.numQtdCompra.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -1271,8 +1247,6 @@ namespace uniBaterFrenteLoja
             this.Controls.Add(this.txtSubTotal);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label24);
-            this.Controls.Add(this.txtSubTotalCompra);
-            this.Controls.Add(this.label22);
             this.Controls.Add(this.txtValorCompra);
             this.Controls.Add(this.label21);
             this.Controls.Add(this.txtValor);
@@ -1377,8 +1351,6 @@ namespace uniBaterFrenteLoja
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.TextBox txtSubTotalCompra;
-        private System.Windows.Forms.Label label22;
         private System.Windows.Forms.TextBox txtValorCompra;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label1;

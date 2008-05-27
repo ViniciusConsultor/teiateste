@@ -110,7 +110,6 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox7_Click(object sender, EventArgs e)
         {
-
             if (numVenda == 0)
             {
                 txtDicas.Text = "NÃO HÁ VENDA ABERTA!";
@@ -123,7 +122,7 @@ namespace uniBaterFrenteLoja
                   {
                    string retorno = objVenda.efetuaPagamento(numVenda, Convert.ToDecimal(txtTotal.Text), Convert.ToDecimal(txtValorPago.Text), formaPagamento);
                    dgvPagamentos.DataSource = objVenda.retornaPagamentosEfetuados(numVenda);
-                   objVenda.trataRetornoPagamento(retorno, this, numVenda);
+                   objVenda.trataRetornoPagamento(retorno, this, numVenda,0);
                    txtValorPago.ResetText();
                }
                catch { }
@@ -339,7 +338,6 @@ namespace uniBaterFrenteLoja
 
         private void pictureBox15_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(cbTipoBateria.SelectedValue.ToString());
         }
 
         private void pictureBox8_Click(object sender, EventArgs e)

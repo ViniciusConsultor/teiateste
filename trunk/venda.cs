@@ -43,6 +43,13 @@ namespace uniBaterFrenteLoja
             return Int32.Parse(doc.GetElementsByTagName("caixa")[0].InnerText);
         }
 
+        public int retornaPortaNaoFiscal()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load("config.xml");
+            return Int32.Parse(doc.GetElementsByTagName("portaNaoFiscal")[0].InnerText);
+        }
+
         public int verificaVendaAberta(char tipo, int loja, int operador, int caixa) 
         {
             MySqlParameter[] par = new MySqlParameter[4];
@@ -118,13 +125,13 @@ namespace uniBaterFrenteLoja
             DataTable dt = retornaItens(cupom);
 
             //campos retornados pelo "retornaItens(cupom)"
-            //SELECT ubitem.id ID,itemCodigo COD ,itemQuantidade QTDE,itemValorVenda UNIDADE, (itemQuantidade * itemValorVenda) SUBTOTAL,pdDescProd  from ubitem,ubprod where codVenda =27 and itemCodigo = ubprod.id
+            //SELECT ubitem.id ID,itemCodigo COD ,itemQuantidade QTDE,itemValorVenda UNIDADE, (itemQuantidade * itemValorVenda) SUBTOTAL,pdDescProd DESC  from ubitem,ubprod where codVenda =27 and itemCodigo = ubprod.id
 
             decimal TotalCupom = 0;
             
             foreach (DataRow dr in dt.Rows)
             {
-                string descricao = string.Format("{0,-21}",dr["pdDescProd"]);
+                string descricao = string.Format("{0,-21}",dr["DESCRICAO"]);
                 string qtd = Convert.ToInt32(dr["QTDE"]).ToString("000");
                 string vlUnitario = string.Format("{0,9}", dr["UNIDADE"]);
                 string vlSub = string.Format("{0,10}", dr["SUBTOTAL"]);
@@ -294,7 +301,7 @@ namespace uniBaterFrenteLoja
         {
             MySqlParameter[] par = new MySqlParameter[1];
             par[0] = new MySqlParameter("?codVenda",codVenda);
-            string comando = "SELECT ubitem.id ID,itemCodigo COD ,itemQuantidade QTDE,itemValorVenda UNIDADE, (itemQuantidade * itemValorVenda) SUBTOTAL,pdDescProd  from ubitem,ubprod where codVenda = ?codVenda and itemCodigo = ubprod.id";
+            string comando = "SELECT ubitem.id ID,itemCodigo COD ,itemQuantidade QTDE,itemValorVenda UNIDADE, (itemQuantidade * itemValorVenda) SUBTOTAL,pdDescProd DESCRICAO  from ubitem,ubprod where codVenda = ?codVenda and itemCodigo = ubprod.id";
            return objBanco.RetornaDataTable(_conn, CommandType.Text, comando, par);
         }
 
@@ -509,8 +516,29 @@ namespace uniBaterFrenteLoja
             frmTela.txtSubTotal.Text = string.Format("{0:n2}",subtotal);
         }
 
+        public int verificaEstoque(int loja,int venda,int produto,int qtd)
+        {
+            MySqlParameter[] parametros = new MySqlParameter[4];
+
+            parametros[0] = new MySqlParameter("?codLoja", loja);
+            parametros[1] = new MySqlParameter("?codVenda", venda);
+            parametros[2] = new MySqlParameter("?codProd", produto);
+            parametros[3] = new MySqlParameter("?qtd", qtd);
+
+            string comando = "SELECT prodquant - (SUM(itemQuantidade) + ?qtd) qtd FROM ubestoq_lj,ubitem WHERE cod_lj = ?codLoja AND cod_prod = ?codProd AND ubitem.codVenda = ?codVenda GROUP by codvenda;";
+            return Convert.ToInt32(objBanco.RetornaDataRow(_conn, CommandType.Text, comando, parametros)[0]);
+        }
+
         public int inserirItem(int codItem, string codBarras, int codVenda, decimal Qtd, decimal valorBase,decimal valorVenda,string nsBateria)
         {
+            int estoque = verificaEstoque(login.idLoja, codVenda, codItem, Convert.ToInt32(Qtd));
+
+            if (estoque <= 0)
+            {
+                MessageBox.Show(estoque.ToString());
+            }
+          
+            
             MySqlParameter[] parametros= new MySqlParameter[7];
 
             parametros[0] = new MySqlParameter("?codItem",codItem);
@@ -576,7 +604,7 @@ namespace uniBaterFrenteLoja
             return objBanco.RetornaDataTable(_conn, CommandType.Text, comando, parametros);
         }
 
-        public void trataRetornoPagamento(string retornoPag, vendaOrcamento frmTela, int codVenda) 
+        public void trataRetornoPagamento(string retornoPag, vendaOrcamento frmTela, int codVenda,int nota) 
         {
             string flag = retornoPag.Substring(0, 1);
             string valor = retornoPag.Substring(1);
@@ -584,9 +612,11 @@ namespace uniBaterFrenteLoja
 
             if (flag == "+") 
             {
-                //montaOrcamento(int cupom, int loja, int caixa, int vendedor) 
-                
-                montaOrcamento(codVenda, login.idLoja, frmTela.caixa, login.idUsuario);
+
+                if (nota == 0)
+                {
+                    montaOrcamento(codVenda, login.idLoja, frmTela.caixa, login.idUsuario);
+                }
 
                 frmTela.txtTroco.Text = valor;
 
